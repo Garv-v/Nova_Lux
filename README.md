@@ -1,45 +1,28 @@
 # Nova_Lux
 
-Unity 탄막 게임 프로젝트. Universal 2D 템플릿.
+Unity 6 프로젝트 (Universal 2D 템플릿). 게임 규칙과 수치는 [docs/02-기획서.md](docs/02-기획서.md), 용어는 [CONTEXT.md](CONTEXT.md), 되돌리기 어려운 결정의 이유는 [docs/adr/](docs/adr/)에 있다.
 
 ## 요구 사항
 
 - **Unity 6000.6.2f1** (다른 버전으로 열지 않는다. 열면 에셋이 재직렬화되어 불필요한 diff가 대량으로 생긴다)
 - Git, Git LFS
+- AI 도구를 쓸 때만: Unity CLI, [uv](https://docs.astral.sh/uv/)
 
-## 처음 세팅
+## 필수 설정 (PC당 1회)
 
-1. GitHub 저장소 초대를 수락한다.
-2. Git LFS를 켠다 (PC당 1회).
+1. Git LFS를 켠다.
 
    ```bash
    git lfs install
    ```
 
-3. clone한다.
-
-   ```bash
-   git clone https://github.com/Garv-v/Nova_Lux.git
-   ```
-
-4. 커밋 작성자를 설정한다 (이미 되어 있으면 건너뛴다).
-
-   ```bash
-   git config --global user.name "이름"
-   ```
-
-   ```bash
-   git config --global user.email "GitHub 이메일"
-   ```
-
-5. **병합 도구를 등록한다.** clone한 폴더 안에서 실행하고, 경로는 본인 PC의 Unity 설치 경로로 바꾼다. 등록하지 않으면 씬/프리팹 충돌 시 Unity 스마트 병합이 동작하지 않는다.
+2. **병합 도구를 등록한다.** clone한 폴더 안에서 실행하고, 경로는 본인 PC의 Unity 설치 경로로 바꾼다. 등록하지 않으면 씬/프리팹 충돌 시 Unity 스마트 병합이 동작하지 않는다.
 
    ```bash
    git config --local merge.unityyamlmerge.driver "'C:/Program Files/Unity/Hub/Editor/6000.6.2f1/Editor/Data/Tools/UnityYAMLMerge.exe' merge -p %O %B %A %A"
    ```
 
-6. Unity Hub에서 `Add > Add project from disk`로 clone한 폴더를 연다. 첫 임포트는 오래 걸리고 `Library/`가 자동으로 생긴다.
-7. `Edit > Project Settings > Version Control`의 Mode가 **Visible Meta Files**인지 확인한다. `Unity Version Control`로 바뀌어 있으면 되돌린다. 이 프로젝트는 Git만 쓴다.
+3. `Edit > Project Settings > Version Control`의 Mode가 **Visible Meta Files**인지 확인한다. `Unity Version Control`로 바뀌어 있으면 되돌린다. 이 프로젝트는 Git만 쓴다.
 
 ## 브랜치 규칙
 
@@ -71,9 +54,37 @@ Unity 탄막 게임 프로젝트. Universal 2D 템플릿.
 - 작업 시작 전에 `main`을 pull한다.
 - **씬(`.unity`)은 담당자를 정한다.** 어떤 씬을 건드리는 브랜치를 만들 때 상대에게 미리 알리고, 그 씬은 그 브랜치만 수정한다. 같은 씬을 동시에 열어 고치지 않는다. 공통 오브젝트는 프리팹으로 나눠 각자 맡는다.
 - 에셋 이동/삭제/이름 변경은 **반드시 Unity 에디터 안에서** 한다. 탐색기에서 하면 `.meta`의 GUID가 깨져 참조가 끊긴다. `.meta` 파일은 에셋과 함께 항상 커밋한다.
-- 자주 바뀌는 로직(탄막 패턴 등)은 씬이 아니라 C# 스크립트에 둔다.
-- 탄막은 `Instantiate`/`Destroy` 대신 처음부터 **오브젝트 풀링**으로 만든다.
+- 자주 바뀌는 수치와 로직은 씬이 아니라 C# 스크립트나 데이터 에셋에 둔다.
 - `ProjectSettings/ProjectVersion.txt`나 패키지 버전이 바뀌는 변경(에디터 업그레이드 등)은 다른 변경과 섞지 않고 따로 커밋한다.
+
+## AI 도구 (Claude Code + Unity)
+
+두 도구를 함께 쓴다. 역할은 [CLAUDE.md](CLAUDE.md)에 있다.
+
+- **Unity CLI**: 셸 명령(`unity ...`)으로 열린 에디터를 제어한다. 씬·프리팹·컴포넌트 편집, 스크린샷, 콘솔, 플레이 모드, 테스트, 빌드. 기본으로 쓴다.
+- **UnityMCP (CoplayDev)**: CLI로 안 될 때 한 번 더 시도하는 용도이고, API 확인·스프라이트·프로파일러 등 CLI에 없는 기능을 맡는다. 패키지는 `Packages/manifest.json`에 들어 있어 프로젝트를 열면 설치된다.
+
+설치 (PC당 1회):
+
+1. Unity CLI를 설치하고 Claude Code용 스킬을 깐다.
+
+   ```bash
+   winget install Unity.CLI
+   ```
+
+   ```bash
+   unity skill install claude-code
+   ```
+
+2. 에디터에서 프로젝트를 연 뒤 `Window > MCP for Unity > Toggle MCP Window`(Ctrl+Shift+M)를 연다.
+3. 처음 뜨는 MCP Setup 창에서는 **Claude Code만** 남기고 Configure Selected를 누른다.
+4. Connect 탭에서 **Start Server**를 누른다. 서버는 에디터를 열 때마다 켜져 있는지 확인한다.
+
+주의:
+
+- `unity mcp configure`는 실행하지 않는다. CLI 도구 130여 개가 매 세션 컨텍스트에 올라가 토큰을 쓴다. CLI는 셸 명령으로 충분하다.
+- uGUI는 두 도구 모두 전용 도구가 없다. 값을 직접 설정하고 스크린샷으로 확인해야 해서 오래 걸린다.
+- 연결 확인: `unity status`(state `ready`), `claude mcp list`(UnityMCP `Connected`).
 
 ## 파일 관리
 
