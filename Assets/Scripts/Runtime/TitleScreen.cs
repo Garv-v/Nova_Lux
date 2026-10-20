@@ -31,7 +31,7 @@ namespace NovaLux
             AddButton(canvas.transform, 0, "NewGame", "새로 시작", true, () => SceneManager.LoadScene(SceneNames.Hallway));
             AddButton(canvas.transform, 1, "Continue", "이어하기", false, null);
             AddButton(canvas.transform, 2, "Gallery", "갤러리", true, null);
-            AddButton(canvas.transform, 3, "Settings", "환경설정", true, null);
+            AddButton(canvas.transform, 3, "Settings", "환경설정", true, () => SettingsPanel.Create(canvas.transform));
             AddButton(canvas.transform, 4, "Quit", "종료", true, AppQuit.Quit);
         }
 
