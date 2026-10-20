@@ -1,0 +1,21 @@
+{
+    "name": "NovaLux.Tests.PlayMode",
+    "rootNamespace": "NovaLux.Tests",
+    "references": [
+        "NovaLux.Runtime",
+        "Unity.InputSystem",
+        "Unity.InputSystem.TestFramework",
+        "UnityEngine.UI",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "autoReferenced": false
+}
