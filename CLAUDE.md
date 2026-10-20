@@ -18,3 +18,17 @@ UnityMCP가 먼저인 작업: C# 작성 전 API 확인(`unity_reflect`, `unity_d
 - 화면은 `unity command screenshot`으로 확인한다. Screen Space Overlay UI는 카메라 렌더에 빠지므로, Play Mode에서 `capture_game_view`를 `source=screen`으로 찍는다.
 - uGUI는 전용 도구가 없다. `set_serialized_field`, `set_component_properties`로 RectTransform 등의 값을 쓰고, 매번 스크린샷으로 확인한다.
 - 에셋 이동·이름 변경은 `move_asset`, `rename_asset`으로 한다(GUID 유지).
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues (`Garv-v/Nova_Lux`, `gh` CLI). See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+기본 5개 라벨 (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+single-context (루트 `CONTEXT.md` + `docs/adr/`). See `docs/agents/domain.md`.
