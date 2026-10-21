@@ -13,17 +13,20 @@ MonoBehaviour:
   m_Name: UiTheme
   m_EditorClassIdentifier: NovaLux.Runtime::NovaLux.UiTheme
   buttonColor: {r: 0.9411765, g: 0.96862745, b: 1, a: 1}
-  accentColor: {r: 0.23529412, g: 0.5411765, b: 0.8784314, a: 1}
+  accentColor: {r: 0.17254902, g: 0.45490196, b: 0.7882353, a: 1}
   textColor: {r: 0.14901961, g: 0.2627451, b: 0.37254903, a: 1}
-  handleColor: {r: 0.14901961, g: 0.2627451, b: 0.37254903, a: 1}
-  panelColor: {r: 0.81960785, g: 0.8901961, b: 0.9607843, a: 1}
+  handleColor: {r: 1, g: 1, b: 1, a: 1}
+  panelColor: {r: 0.9411765, g: 0.96862745, b: 1, a: 1}
   selectedTextColor: {r: 1, g: 1, b: 1, a: 1}
-  pressedColor: {r: 0.17254902, g: 0.45490196, b: 0.7882353, a: 1}
+  pressedColor: {r: 0.13333334, g: 0.37254903, b: 0.65882355, a: 1}
   disabledColor: {r: 0.5803922, g: 0.68235296, b: 0.7764706, a: 1}
   chipColor: {r: 0.8117647, g: 0.8980392, b: 0.9843137, a: 1}
   iconColor: {r: 0.15686275, g: 0.47058824, b: 0.8, a: 1}
   selectedChipColor: {r: 1, g: 1, b: 1, a: 1}
   disabledChipColor: {r: 0.88235295, g: 0.93333334, b: 0.98039216, a: 1}
+  secondaryChipColor: {r: 0.88235295, g: 0.93333334, b: 0.98039216, a: 1}
+  sliderTrackColor: {r: 0.81960785, g: 0.8901961, b: 0.9607843, a: 1}
+  scrimColor: {r: 0.14901961, g: 0.2627451, b: 0.37254903, a: 0.54901963}
   pillSprite: {fileID: 21300000, guid: 0d3980843ad99f349815f51f6d63e101, type: 3}
   circleSprite: {fileID: 21300000, guid: 675894c016c09764d8723fd4056ab819, type: 3}
   iconNewGame: {fileID: 21300000, guid: 5a5da36d6db1ee440a6ff4391bc1b1e2, type: 3}
@@ -59,6 +62,12 @@ MonoBehaviour:
   resStep: 125
   closeButtonSize: {x: 300, y: 80}
   closeOffsetY: -20
-  sliderFillInset: 12
-  sliderHandleInset: 15
-  sliderHandleWidth: 30
+  cardSize: {x: 1320, y: 860}
+  cardOffsetY: -15
+  cardCornerRadius: 56
+  rowChipX: -575
+  rowChipSize: 64
+  rowIconSize: 36
+  sliderTrackHeight: 20
+  sliderHandleSize: 40
+  focusRingWidth: 4

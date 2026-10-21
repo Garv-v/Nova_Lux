@@ -43,7 +43,7 @@ namespace NovaLux.Tests
         }
 
         [UnityTest]
-        public IEnumerator Keyboard_Enter_OnSettings_OpensPanel_AndClearsSelection()
+        public IEnumerator Keyboard_Enter_OnSettings_OpensPanel_ClearsSelection_ThenDownSelectsFirstSetting()
         {
             yield return LoadTitle();
             for (var i = 0; i < 3; i++) yield return Tap(Keyboard.downArrowKey);
@@ -55,7 +55,7 @@ namespace NovaLux.Tests
             Assert.AreEqual(1, Object.FindObjectsByType<SettingsPanel>().Length);
             Assert.IsNull(Selected);
             yield return Tap(Keyboard.downArrowKey);
-            Assert.IsNull(Selected);
+            Assert.AreSame(FindSlider("Bgm").gameObject, Selected);
         }
 
         [UnityTest]
