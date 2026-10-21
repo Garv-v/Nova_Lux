@@ -30,7 +30,9 @@ unity test . --mode PlayMode --output "$TEMP/nl-results.xml"
 unity open .
 ```
 
-결과는 출력 XML의 `total`, `passed`, `failed` 속성으로 본다. `unity close`는 저장 없이 종료하므로 먼저 `unity command save_all`을 한다.
+결과는 출력 XML의 `total`, `passed`, `failed` 속성으로 본다. 이전 실행의 XML이 남아 있으면 헷갈리므로 먼저 지운다.
+
+`unity close`는 저장 없이 종료한다. 씬·프리팹을 에디터에서 편집했을 때만 먼저 `unity command save_all`을 한다. 이름 없는(저장된 적 없는) 씬이 열려 있으면 `save_all`이 "씬 저장" 창을 띄워 에디터가 멈추고 30초 뒤 시간 초과가 나므로, 먼저 `Title.unity` 같은 저장된 씬을 열어 둔다. C#만 고쳤다면 `save_all`은 필요 없다.
 
 ## 미해결
 
