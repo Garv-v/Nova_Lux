@@ -59,6 +59,19 @@ namespace NovaLux.Tests
         }
 
         [UnityTest]
+        public IEnumerator Gamepad_South_OnQuit_Quits()
+        {
+            yield return LoadTitle();
+            for (var i = 0; i < 4; i++) yield return Tap(Gamepad.dpad.down);
+            Assert.AreSame(FindButton("Quit").gameObject, Selected);
+
+            yield return Tap(Gamepad.buttonSouth);
+            yield return null;
+
+            Assert.AreEqual(1, QuitCalls);
+        }
+
+        [UnityTest]
         public IEnumerator Gamepad_Dpad_Navigates()
         {
             yield return LoadTitle();

@@ -39,7 +39,7 @@ namespace NovaLux
         public TMP_FontAsset fontJa;
         public TMP_FontAsset Font => fontKo;
 
-        // 초기화면 (1920x1080 기준, 화면 중앙 세로 배치)
+        // 초기화면 (1920x1080 기준, 왼쪽 정렬 세로 배치)
         public Vector2 titleButtonSize = new Vector2(480f, 90f);
         public float titleButtonGap = 24f;
         public float titleMenuX = -560f;

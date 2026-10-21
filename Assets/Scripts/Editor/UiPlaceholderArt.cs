@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -26,19 +25,6 @@ namespace NovaLux.EditorTools
             theme.iconGallery = Save("icon_gallery", 128, 128, Gallery, Vector4.zero);
             theme.iconSettings = Save("icon_settings", 128, 128, Gear, Vector4.zero);
             theme.iconQuit = Save("icon_quit", 128, 128, Power, Vector4.zero);
-            EditorUtility.SetDirty(theme);
-            AssetDatabase.SaveAssets();
-        }
-
-        // 테마 에셋의 색과 초기화면 크기를 UiTheme 코드의 기본값(마시멜로 + 하늘 팔레트)으로 되돌린다. 스프라이트 참조는 건드리지 않는다.
-        public static void ApplyPaletteDefaults()
-        {
-            var theme = AssetDatabase.LoadAssetAtPath<UiTheme>(ThemePath);
-            var defaults = ScriptableObject.CreateInstance<UiTheme>();
-            foreach (var field in typeof(UiTheme).GetFields())
-                if (field.FieldType == typeof(Color) || field.Name.StartsWith("title", StringComparison.Ordinal))
-                    field.SetValue(theme, field.GetValue(defaults));
-            UnityEngine.Object.DestroyImmediate(defaults);
             EditorUtility.SetDirty(theme);
             AssetDatabase.SaveAssets();
         }
