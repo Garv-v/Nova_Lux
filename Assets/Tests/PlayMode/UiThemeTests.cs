@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
@@ -34,6 +35,7 @@ namespace NovaLux.Tests
             _theme.panelColor = PanelColor;
             _theme.fontSize = 33;
             _theme.smallFontSize = 29;
+            _theme.fontKo = Resources.Load<UiTheme>("UiTheme").fontKo;
             _theme.titleButtonSize = new Vector2(401f, 77f);
             _theme.titleButtonGap = 13f;
             _theme.rowGap = 71f;
@@ -53,7 +55,7 @@ namespace NovaLux.Tests
             base.TearDown();
         }
 
-        static Text LabelOf(Button button) => button.transform.Find("Label").GetComponent<Text>();
+        static TMP_Text LabelOf(Button button) => button.transform.Find("Label").GetComponent<TMP_Text>();
 
         [UnityTest]
         public IEnumerator TitleButtons_ReadTheme()
@@ -64,6 +66,18 @@ namespace NovaLux.Tests
             Assert.AreEqual(ButtonColor, ((Image)button.targetGraphic).color);
             Assert.AreEqual(TextColor, LabelOf(button).color);
             Assert.AreEqual(33, LabelOf(button).fontSize);
+        }
+
+        [UnityTest]
+        public IEnumerator Labels_UseThemeFont()
+        {
+            yield return LoadTitle();
+            Assert.IsNotNull(_theme.fontKo);
+            Assert.AreSame(_theme.fontKo, LabelOf(FindButton("NewGame")).font);
+
+            yield return Click(FindButton("Settings"));
+            var panel = Object.FindObjectsByType<SettingsPanel>().Single().transform;
+            Assert.AreSame(_theme.fontKo, panel.Find("LabelBgm").GetComponent<TMP_Text>().font);
         }
 
         [UnityTest]
@@ -101,7 +115,7 @@ namespace NovaLux.Tests
             var panel = Object.FindObjectsByType<SettingsPanel>().Single().transform;
             Assert.AreEqual(PanelColor, panel.GetComponent<Image>().color);
 
-            var label = panel.Find("LabelBgm").GetComponent<Text>();
+            var label = panel.Find("LabelBgm").GetComponent<TMP_Text>();
             Assert.AreEqual(33, label.fontSize);
             Assert.AreEqual(TextColor, label.color);
 

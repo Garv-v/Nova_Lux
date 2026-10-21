@@ -3,7 +3,8 @@
     "rootNamespace": "NovaLux",
     "references": [
         "Unity.InputSystem",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "autoReferenced": true
 }

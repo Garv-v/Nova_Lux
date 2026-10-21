@@ -1,9 +1,10 @@
+using TMPro;
 using UnityEngine;
 
 namespace NovaLux
 {
     // 화면 사이에 공유되는 UI 겉모습 값. 아트 스타일이 정해지면 값만 바꾼다.
-    // 기본값은 코드가 만들고, 테스트는 Current에 다른 인스턴스를 끼운다.
+    // 기본은 Resources/UiTheme 에셋이고, 없으면 코드가 만든 기본값을 쓴다. 테스트는 Current에 다른 인스턴스를 끼운다.
     public class UiTheme : ScriptableObject
     {
         public Color buttonColor = new Color(0.25f, 0.25f, 0.3f);
@@ -13,6 +14,11 @@ namespace NovaLux
         public Color panelColor = new Color(0.05f, 0.05f, 0.08f, 1f);
         public int fontSize = 40;
         public int smallFontSize = 36;
+
+        // 언어별 서체. 언어 선택(#4)이 들어오기 전까지는 한국어를 쓴다. null이면 TMP 기본 서체.
+        public TMP_FontAsset fontKo;
+        public TMP_FontAsset fontJa;
+        public TMP_FontAsset Font => fontKo;
 
         // 초기화면 (1920x1080 기준, 화면 중앙 세로 배치)
         public Vector2 titleButtonSize = new Vector2(480f, 90f);
@@ -44,7 +50,7 @@ namespace NovaLux
         {
             get
             {
-                if (_current == null) _current = CreateInstance<UiTheme>();
+                if (_current == null) _current = Resources.Load<UiTheme>("UiTheme") ?? CreateInstance<UiTheme>();
                 return _current;
             }
             set => _current = value;

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 885222f09637a9e4d93b83ded45d3a8f, type: 3}
+  m_Name: UiTheme
+  m_EditorClassIdentifier: NovaLux.Runtime::NovaLux.UiTheme
+  buttonColor: {r: 0.25, g: 0.25, b: 0.3, a: 1}
+  accentColor: {r: 0.45, g: 0.6, b: 0.9, a: 1}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  handleColor: {r: 1, g: 1, b: 1, a: 1}
+  panelColor: {r: 0.05, g: 0.05, b: 0.08, a: 1}
+  fontSize: 40
+  smallFontSize: 36
+  fontKo: {fileID: 11400000, guid: 9758d594a7275154d9580b229e6859cb, type: 2}
+  fontJa: {fileID: 11400000, guid: a71d27578280a1d4799732f5b0e1aedf, type: 2}
+  titleButtonSize: {x: 480, y: 90}
+  titleButtonGap: 24
+  rowGap: 95
+  firstRowY: 330
+  labelX: -300
+  controlX: 250
+  labelSize: {x: 420, y: 60}
+  sliderSize: {x: 500, y: 40}
+  modeButtonSize: {x: 500, y: 60}
+  resButtonSize: {x: 115, y: 60}
+  resFirstX: 57.5
+  resStep: 125
+  closeButtonSize: {x: 300, y: 80}
+  closeOffsetY: -20
+  sliderFillInset: 12
+  sliderHandleInset: 15
+  sliderHandleWidth: 30

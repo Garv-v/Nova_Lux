@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,7 +33,7 @@ namespace NovaLux
             AddLabel("DisplayMode", "화면 모드", modeY);
             var mode = AddButton("DisplayMode", ModeLabel(s.fullscreen), new Vector2(theme.controlX, modeY),
                 theme.modeButtonSize);
-            var modeText = mode.GetComponentInChildren<Text>();
+            var modeText = mode.GetComponentInChildren<TMP_Text>();
             mode.onClick.AddListener(() =>
             {
                 Settings.Set(d => d.fullscreen = !d.fullscreen);
@@ -73,7 +74,7 @@ namespace NovaLux
         void AddLabel(string id, string label, float y)
         {
             var theme = UiTheme.Current;
-            var text = UiKit.NewLabel(transform, "Label" + id, label, theme.fontSize, TextAnchor.MiddleRight);
+            var text = UiKit.NewLabel(transform, "Label" + id, label, theme.fontSize, TextAlignmentOptions.Right);
             UiKit.Place(text.rectTransform, new Vector2(theme.labelX, y), theme.labelSize);
         }
 

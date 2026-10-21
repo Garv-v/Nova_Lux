@@ -1,6 +1,7 @@
 using System.Collections;
 using System.IO;
 using NUnit.Framework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
@@ -178,7 +179,7 @@ namespace NovaLux.Tests
 
             Assert.AreEqual(1, ScreenCalls.Count);
             Assert.AreEqual((1920, 1080, FullScreenMode.Windowed), ScreenCalls[0]);
-            Assert.AreEqual("창모드", FindButton("DisplayMode").GetComponentInChildren<Text>().text);
+            Assert.AreEqual("창모드", FindButton("DisplayMode").GetComponentInChildren<TMP_Text>().text);
             Settings.Reload();
             Assert.IsFalse(Settings.Current.fullscreen);
         }
@@ -203,7 +204,7 @@ namespace NovaLux.Tests
             yield return LoadTitle();
             yield return Click(FindButton("Settings"));
 
-            Assert.AreEqual("창모드", FindButton("DisplayMode").GetComponentInChildren<Text>().text);
+            Assert.AreEqual("창모드", FindButton("DisplayMode").GetComponentInChildren<TMP_Text>().text);
         }
 
         [UnityTest]
