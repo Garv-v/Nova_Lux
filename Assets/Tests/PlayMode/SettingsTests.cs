@@ -3,6 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
 
@@ -167,6 +168,56 @@ namespace NovaLux.Tests
             Assert.AreEqual(0.3f, Settings.Current.bgm, 1e-4f);
             Assert.AreEqual(70f, Settings.Current.textCps, 1e-4f);
             Assert.AreEqual(3f, Settings.Current.autoDelaySec, 1e-4f);
+        }
+
+        // 끄는 동안 매 프레임 디스크에 쓰면 끊긴다. 값은 바로 반영하고, 마우스를 놓을 때 한 번 저장한다.
+        [UnityTest]
+        public IEnumerator SliderDrag_AppliesAtOnce_ButWritesFileOnlyWhenReleased()
+        {
+            yield return LoadTitle();
+            yield return Click(FindButton("Settings"));
+            var slider = FindSlider("Bgm");
+
+            slider.value = 0.2f;
+            slider.value = 0.4f;
+            slider.value = 0.6f;
+
+            Assert.AreEqual(0.6f, Settings.Current.bgm, 1e-4f);
+            Assert.IsFalse(File.Exists(_path));
+
+            ExecuteEvents.Execute(slider.gameObject, new PointerEventData(EventSystem.current),
+                ExecuteEvents.pointerUpHandler);
+
+            Assert.IsTrue(File.Exists(_path));
+            Settings.Reload();
+            Assert.AreEqual(0.6f, Settings.Current.bgm, 1e-4f);
+        }
+
+        [UnityTest]
+        public IEnumerator ClosingPanel_SavesPendingSliderChange()
+        {
+            yield return LoadTitle();
+            yield return Click(FindButton("Settings"));
+            FindSlider("Sfx").value = 0.25f;
+            Assert.IsFalse(File.Exists(_path));
+
+            yield return Click(FindButton("Close"));
+
+            Settings.Reload();
+            Assert.AreEqual(0.25f, Settings.Current.sfx, 1e-4f);
+        }
+
+        [UnityTest]
+        public IEnumerator Release_WithoutChange_DoesNotWriteFile()
+        {
+            yield return LoadTitle();
+            yield return Click(FindButton("Settings"));
+            var slider = FindSlider("Bgm");
+
+            ExecuteEvents.Execute(slider.gameObject, new PointerEventData(EventSystem.current),
+                ExecuteEvents.pointerUpHandler);
+
+            Assert.IsFalse(File.Exists(_path));
         }
 
         [UnityTest]

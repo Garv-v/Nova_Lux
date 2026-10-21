@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,6 +10,9 @@ namespace NovaLux
     public class PillSlider : Slider
     {
         public float keyStep;
+
+        // 사용자가 값을 정하는 순간: 마우스를 놓을 때, 키보드·패드로 한 단계 옮길 때. 끄는 중에는 불리지 않는다.
+        public event Action Committed;
 
         UiTheme _theme;
         Outline _ring;
@@ -33,6 +37,12 @@ namespace NovaLux
                 EventSystem.current.SetSelectedGameObject(gameObject);
         }
 
+        public override void OnPointerUp(PointerEventData eventData)
+        {
+            base.OnPointerUp(eventData);
+            Committed?.Invoke();
+        }
+
         public override void OnMove(AxisEventData eventData)
         {
             // 옆으로 갈 항목이 없을 때만 값을 바꾼다. 그 규칙은 기본 Slider와 같다.
@@ -42,6 +52,7 @@ namespace NovaLux
                 && (right ? FindSelectableOnRight() : FindSelectableOnLeft()) == null)
             {
                 value += right ? keyStep : -keyStep;
+                Committed?.Invoke();
                 eventData.Use();
                 return;
             }

@@ -50,6 +50,9 @@ namespace NovaLux
             LinkNavigation();
         }
 
+        // 놓지 못한 채 닫히거나 씬이 바뀌어도 마지막 값이 남게 한다.
+        void OnDestroy() => Settings.SaveIfDirty();
+
         void Update()
         {
             if (_closing || _module == null || _module.cancel == null) return;
@@ -163,7 +166,9 @@ namespace NovaLux
 
             var slider = UiKit.NewSlider(transform, id, min, max, whole, value, keyStep, chip);
             UiKit.Place((RectTransform)slider.transform, new Vector2(theme.controlX, y), theme.sliderSize);
-            slider.onValueChanged.AddListener(v => Settings.Set(d => apply(d, v)));
+            // 끄는 동안은 메모리에만 반영하고, 놓을 때 저장한다(매 프레임 디스크에 쓰면 끊긴다).
+            slider.onValueChanged.AddListener(v => Settings.Edit(d => apply(d, v)));
+            slider.Committed += Settings.SaveIfDirty;
             return slider;
         }
 
