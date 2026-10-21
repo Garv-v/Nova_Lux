@@ -21,8 +21,8 @@ namespace NovaLux
             var scaler = canvas.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1920, 1080);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            scaler.matchWidthOrHeight = 0.5f;
+            // 16:9가 아닌 화면에서도 1920x1080 영역이 레터박스 안쪽에 들어가게 한다.
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
             if (FindFirstObjectByType<EventSystem>() == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule))

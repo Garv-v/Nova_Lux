@@ -7,8 +7,8 @@ namespace NovaLux
     // 임시 박스 UI. 값을 바꾸면 즉시 Settings에 저장한다.
     public class SettingsPanel : MonoBehaviour
     {
-        const float RowGap = 110f;
-        const float FirstRowY = 250f;
+        const float RowGap = 95f;
+        const float FirstRowY = 330f;
 
         public static SettingsPanel Create(Transform canvas)
         {
@@ -27,7 +27,65 @@ namespace NovaLux
             AddRow(2, "Voice", "보이스", 0f, 1f, false, s.voice, (d, v) => d.voice = v);
             AddRow(3, "TextSpeed", "텍스트 속도", 10f, 100f, true, s.textCps, (d, v) => d.textCps = v);
             AddRow(4, "AutoSpeed", "자동 진행", 0.5f, 5f, false, s.autoDelaySec, (d, v) => d.autoDelaySec = v);
+            AddDisplayRows(s);
             AddCloseButton();
+        }
+
+        void AddDisplayRows(SettingsData s)
+        {
+            var modeY = FirstRowY - 5 * RowGap;
+            var modeLabel = AddText(transform, "LabelDisplayMode", "화면 모드", 40, TextAnchor.MiddleRight);
+            Place((RectTransform)modeLabel.transform, new Vector2(-300f, modeY), new Vector2(420f, 60f));
+            var mode = AddButton("DisplayMode", ModeLabel(s.fullscreen), new Vector2(250f, modeY),
+                new Vector2(500f, 60f), Normal);
+            var modeText = mode.GetComponentInChildren<Text>();
+            mode.onClick.AddListener(() =>
+            {
+                Settings.Set(d => d.fullscreen = !d.fullscreen);
+                modeText.text = ModeLabel(Settings.Current.fullscreen);
+                ScreenSettings.Apply(Settings.Current);
+            });
+
+            var resY = FirstRowY - 6 * RowGap;
+            var resLabel = AddText(transform, "LabelResolution", "해상도", 40, TextAnchor.MiddleRight);
+            Place((RectTransform)resLabel.transform, new Vector2(-300f, resY), new Vector2(420f, 60f));
+            var ids = new[] { "Res720", "Res1080", "Res1440", "Res2160" };
+            var names = new[] { "720p", "1080p", "2K", "4K" };
+            var buttons = new Button[ids.Length];
+            for (var i = 0; i < ids.Length; i++)
+            {
+                var index = i;
+                var x = 57.5f + i * 125f;
+                buttons[i] = AddButton(ids[i], names[i], new Vector2(x, resY), new Vector2(115f, 60f), Normal);
+                buttons[i].onClick.AddListener(() =>
+                {
+                    Settings.Set(d => d.resolution = index);
+                    Highlight(buttons, index);
+                    ScreenSettings.Apply(Settings.Current);
+                });
+            }
+            Highlight(buttons, s.resolution);
+        }
+
+        static string ModeLabel(bool fullscreen) => fullscreen ? "전체화면" : "창모드";
+
+        static readonly Color Normal = new Color(0.25f, 0.25f, 0.3f);
+        static readonly Color Selected = new Color(0.45f, 0.6f, 0.9f);
+
+        static void Highlight(Button[] buttons, int selected)
+        {
+            for (var i = 0; i < buttons.Length; i++)
+                ((Image)buttons[i].targetGraphic).color = i == selected ? Selected : Normal;
+        }
+
+        Button AddButton(string id, string label, Vector2 position, Vector2 size, Color color)
+        {
+            var image = NewImage(id, transform, color);
+            Place(image.rectTransform, position, size);
+            var button = image.gameObject.AddComponent<Button>();
+            var text = AddText(image.transform, "Label", label, 36, TextAnchor.MiddleCenter);
+            Stretch((RectTransform)text.transform);
+            return button;
         }
 
         void AddRow(int row, string id, string label, float min, float max, bool whole, float value,
@@ -83,7 +141,7 @@ namespace NovaLux
         void AddCloseButton()
         {
             var image = NewImage("Close", transform, new Color(0.25f, 0.25f, 0.3f));
-            Place(image.rectTransform, new Vector2(0f, FirstRowY - 5 * RowGap - 20f), new Vector2(300f, 80f));
+            Place(image.rectTransform, new Vector2(0f, FirstRowY - 7 * RowGap - 20f), new Vector2(300f, 80f));
             var button = image.gameObject.AddComponent<Button>();
             button.onClick.AddListener(() => Destroy(gameObject));
 

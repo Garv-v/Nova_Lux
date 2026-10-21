@@ -13,6 +13,7 @@ namespace NovaLux.Tests
         Mouse _mouse;
 
         protected int QuitCalls { get; private set; }
+        protected System.Collections.Generic.List<(int w, int h, FullScreenMode mode)> ScreenCalls { get; } = new();
 
         public override void Setup()
         {
@@ -20,11 +21,14 @@ namespace NovaLux.Tests
             _mouse = InputSystem.AddDevice<Mouse>();
             QuitCalls = 0;
             AppQuit.Handler = () => QuitCalls++;
+            ScreenCalls.Clear();
+            ScreenSettings.Handler = (w, h, m) => ScreenCalls.Add((w, h, m));
         }
 
         public override void TearDown()
         {
             AppQuit.Handler = null;
+            ScreenSettings.Handler = null;
             base.TearDown();
         }
 
