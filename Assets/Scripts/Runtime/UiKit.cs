@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,18 +20,21 @@ namespace NovaLux
             var image = NewImage(id, parent, UiTheme.Current.buttonColor);
             Place(image.rectTransform, position, size);
             var button = image.gameObject.AddComponent<Button>();
-            Stretch(NewLabel(image.transform, "Label", label, fontSize, TextAnchor.MiddleCenter).rectTransform);
+            Stretch(NewLabel(image.transform, "Label", label, fontSize, TextAlignmentOptions.Center).rectTransform);
             return button;
         }
 
-        public static Text NewLabel(Transform parent, string name, string content, int size, TextAnchor anchor)
+        public static TextMeshProUGUI NewLabel(Transform parent, string name, string content, int size,
+            TextAlignmentOptions alignment)
         {
-            var text = new GameObject(name, typeof(RectTransform), typeof(Text)).GetComponent<Text>();
+            var text = new GameObject(name, typeof(RectTransform), typeof(TextMeshProUGUI))
+                .GetComponent<TextMeshProUGUI>();
             text.transform.SetParent(parent, false);
             text.text = content;
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            if (UiTheme.Current.Font != null) text.font = UiTheme.Current.Font;
             text.fontSize = size;
-            text.alignment = anchor;
+            text.alignment = alignment;
+            text.textWrappingMode = TextWrappingModes.NoWrap;
             text.color = UiTheme.Current.textColor;
             text.raycastTarget = false;
             return text;
