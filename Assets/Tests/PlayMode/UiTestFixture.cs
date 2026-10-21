@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace NovaLux.Tests
         protected Keyboard Keyboard { get; private set; }
         protected Gamepad Gamepad { get; private set; }
 
+        string _settingsDir;
+
         protected int QuitCalls { get; private set; }
         protected System.Collections.Generic.List<(int w, int h, FullScreenMode mode)> ScreenCalls { get; } = new();
 
@@ -32,8 +35,22 @@ namespace NovaLux.Tests
             ScreenSettings.Handler = (w, h, m) => ScreenCalls.Add((w, h, m));
         }
 
+        // 설정 파일을 임시 폴더로 돌린다. 폴더는 TearDown에서 지운다.
+        protected void UseTempSettingsFile()
+        {
+            _settingsDir = Path.Combine(Path.GetTempPath(), "NovaLuxTests_" + System.Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(_settingsDir);
+            Settings.FilePath = Path.Combine(_settingsDir, "settings.json");
+        }
+
         public override void TearDown()
         {
+            if (_settingsDir != null)
+            {
+                Settings.FilePath = null;
+                if (Directory.Exists(_settingsDir)) Directory.Delete(_settingsDir, true);
+                _settingsDir = null;
+            }
             AppQuit.Handler = null;
             ScreenSettings.Handler = null;
             base.TearDown();

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
@@ -27,14 +26,11 @@ namespace NovaLux.Tests
         Sprite _pill, _circle;
         Sprite[] _icons;
         Texture2D _texture;
-        string _dir;
 
         public override void Setup()
         {
             base.Setup();
-            _dir = Path.Combine(Path.GetTempPath(), "NovaLuxTests_" + System.Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(_dir);
-            Settings.FilePath = Path.Combine(_dir, "settings.json");
+            UseTempSettingsFile();
 
             _texture = new Texture2D(8, 8);
             _pill = NewSprite(new Vector4(3f, 3f, 3f, 3f));
@@ -69,8 +65,6 @@ namespace NovaLux.Tests
             UiTheme.Current = null;
             Object.Destroy(_theme);
             Object.Destroy(_texture);
-            Settings.FilePath = null;
-            if (Directory.Exists(_dir)) Directory.Delete(_dir, true);
             base.TearDown();
         }
 

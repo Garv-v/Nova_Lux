@@ -161,10 +161,9 @@ namespace NovaLux
             var chip = UiKit.NewIconChip(transform, "Chip" + id, icon, new Vector2(theme.rowChipX, y), theme.rowChipSize,
                 theme.rowIconSize, false);
 
-            var slider = UiKit.NewSlider(transform, id, min, max, whole, value, keyStep);
+            var slider = UiKit.NewSlider(transform, id, min, max, whole, value, keyStep, chip);
             UiKit.Place((RectTransform)slider.transform, new Vector2(theme.controlX, y), theme.sliderSize);
             slider.onValueChanged.AddListener(v => Settings.Set(d => apply(d, v)));
-            slider.AttachChip(chip, chip.transform.Find("Icon").GetComponent<Image>());
             return slider;
         }
 

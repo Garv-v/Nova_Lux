@@ -15,18 +15,14 @@ namespace NovaLux
         Image _chip;
         Image _icon;
 
-        public void Bind(UiTheme theme, Outline ring)
+        // chip, icon은 그 줄의 아이콘 칩이다(없으면 null).
+        public void Bind(UiTheme theme, Outline ring, Image chip, Image icon)
         {
             _theme = theme;
             _ring = ring;
-            transition = Transition.None;
-            DoStateTransition(currentSelectionState, true);
-        }
-
-        public void AttachChip(Image chip, Image icon)
-        {
             _chip = chip;
             _icon = icon;
+            transition = Transition.None;
             DoStateTransition(currentSelectionState, true);
         }
 
@@ -59,7 +55,7 @@ namespace NovaLux
                 || state == SelectionState.Pressed;
             if (_ring != null)
             {
-                _ring.effectColor = _theme.accentColor;
+                _ring.effectColor = _theme.pressedColor;
                 _ring.enabled = focused;
             }
             if (_chip != null) _chip.color = focused ? _theme.accentColor : _theme.chipColor;

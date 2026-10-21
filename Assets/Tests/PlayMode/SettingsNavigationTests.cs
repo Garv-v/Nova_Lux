@@ -1,5 +1,4 @@
 using System.Collections;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
@@ -13,21 +12,10 @@ namespace NovaLux.Tests
         static readonly string[] Order =
             { "Bgm", "Sfx", "Voice", "TextSpeed", "AutoSpeed", "DisplayMode", "Res1080", "Close" };
 
-        string _dir;
-
         public override void Setup()
         {
             base.Setup();
-            _dir = Path.Combine(Path.GetTempPath(), "NovaLuxTests_" + System.Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(_dir);
-            Settings.FilePath = Path.Combine(_dir, "settings.json");
-        }
-
-        public override void TearDown()
-        {
-            Settings.FilePath = null;
-            if (Directory.Exists(_dir)) Directory.Delete(_dir, true);
-            base.TearDown();
+            UseTempSettingsFile();
         }
 
         IEnumerator OpenSettings()

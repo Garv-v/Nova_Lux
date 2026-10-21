@@ -100,8 +100,9 @@ namespace NovaLux
             return text;
         }
 
+        // rowChip은 그 줄의 아이콘 칩(NewIconChip 결과)이고, 슬라이더가 포커스를 받으면 함께 강조된다.
         public static PillSlider NewSlider(Transform parent, string id, float min, float max, bool whole, float value,
-            float keyStep)
+            float keyStep, Image rowChip)
         {
             var theme = UiTheme.Current;
             var root = new GameObject(id, typeof(RectTransform), typeof(PillSlider));
@@ -150,7 +151,7 @@ namespace NovaLux
             slider.wholeNumbers = whole;
             slider.keyStep = keyStep;
             slider.SetValueWithoutNotify(value);
-            slider.Bind(theme, ring);
+            slider.Bind(theme, ring, rowChip, rowChip.transform.Find("Icon").GetComponent<Image>());
             return slider;
         }
 
