@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -9,6 +10,9 @@ namespace NovaLux
     // 임시 박스 UI. 아트와 문자열 표는 이후 티켓에서 바꾼다.
     public class TitleScreen : MonoBehaviour
     {
+        InputSystemUIInputModule _module;
+        SettingsPanel _panel;
+
         void Awake()
         {
             var canvas = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -23,21 +27,39 @@ namespace NovaLux
             if (FindFirstObjectByType<EventSystem>() == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule))
                     .transform.SetParent(transform, false);
+            _module = FindFirstObjectByType<InputSystemUIInputModule>();
 
-            AddButton(canvas.transform, 0, "NewGame", "새로 시작", true, () => SceneManager.LoadScene(SceneNames.Hallway));
-            AddButton(canvas.transform, 1, "Continue", "이어하기", false, null);
-            AddButton(canvas.transform, 2, "Gallery", "갤러리", true, null);
-            AddButton(canvas.transform, 3, "Settings", "환경설정", true, () => SettingsPanel.Create(canvas.transform));
-            AddButton(canvas.transform, 4, "Quit", "종료", true, AppQuit.Quit);
+            AddButton(canvas.transform, 0, "NewGame", "새로 시작", UiTheme.Current.iconNewGame, true, () => SceneManager.LoadScene(SceneNames.Hallway));
+            AddButton(canvas.transform, 1, "Continue", "이어하기", UiTheme.Current.iconContinue, false, null);
+            AddButton(canvas.transform, 2, "Gallery", "갤러리", UiTheme.Current.iconGallery, true, null);
+            AddButton(canvas.transform, 3, "Settings", "환경설정", UiTheme.Current.iconSettings, true, () =>
+            {
+                _panel = SettingsPanel.Create(canvas.transform);
+                // 패널이 가린 초기화면 버튼이 키보드·패드로 눌리지 않게 한다.
+                EventSystem.current.SetSelectedGameObject(null);
+            });
+            AddButton(canvas.transform, 4, "Quit", "종료", UiTheme.Current.iconQuit, true, AppQuit.Quit);
         }
 
-        static void AddButton(Transform parent, int index, string id, string label, bool interactable,
+        // 선택된 것이 없을 때 방향 입력이 오면 첫 버튼부터 선택한다. 시작부터 선택해 두면 첫 버튼이 채워져 보인다.
+        void LateUpdate()
+        {
+            var system = EventSystem.current;
+            if (system == null || _module == null || _panel != null) return;
+            var selected = system.currentSelectedGameObject;
+            if (selected != null && selected.activeInHierarchy) return;
+            if (_module.move == null || _module.move.action.ReadValue<Vector2>() == Vector2.zero) return;
+            var first = GetComponentsInChildren<Button>().FirstOrDefault(b => b.IsInteractable());
+            if (first != null) system.SetSelectedGameObject(first.gameObject);
+        }
+
+        static void AddButton(Transform parent, int index, string id, string label, Sprite icon, bool interactable,
             UnityEngine.Events.UnityAction onClick)
         {
             var theme = UiTheme.Current;
             var step = theme.titleButtonSize.y + theme.titleButtonGap;
-            var button = UiKit.NewButton(parent, id, label, new Vector2(0f, 2f * step - index * step),
-                theme.titleButtonSize, theme.fontSize);
+            var button = UiKit.NewPillButton(parent, id, label, icon,
+                new Vector2(theme.titleMenuX, 2f * step - index * step), theme.titleButtonSize, theme.fontSize);
             button.interactable = interactable;
             if (onClick != null) button.onClick.AddListener(onClick);
         }

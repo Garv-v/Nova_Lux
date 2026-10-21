@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -11,6 +14,8 @@ namespace NovaLux.Tests
     public abstract class UiTestFixture : InputTestFixture
     {
         Mouse _mouse;
+        protected Keyboard Keyboard { get; private set; }
+        protected Gamepad Gamepad { get; private set; }
 
         protected int QuitCalls { get; private set; }
         protected System.Collections.Generic.List<(int w, int h, FullScreenMode mode)> ScreenCalls { get; } = new();
@@ -19,6 +24,8 @@ namespace NovaLux.Tests
         {
             base.Setup();
             _mouse = InputSystem.AddDevice<Mouse>();
+            Keyboard = InputSystem.AddDevice<Keyboard>();
+            Gamepad = InputSystem.AddDevice<Gamepad>();
             QuitCalls = 0;
             AppQuit.Handler = () => QuitCalls++;
             ScreenCalls.Clear();
@@ -49,14 +56,46 @@ namespace NovaLux.Tests
             return Object.FindObjectsByType<Slider>().Single(s => s.name == id);
         }
 
+        protected static GameObject Selected => EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+
+        protected static TMP_Text LabelOf(Button button) => button.transform.Find("Label").GetComponent<TMP_Text>();
+
+        protected static Image Face(Button button) => (Image)button.targetGraphic;
+
         protected IEnumerator Click(Button button)
+        {
+            yield return Hover(button);
+            Click(_mouse.leftButton);
+            yield return null;
+            yield return null;
+        }
+
+        protected IEnumerator Hover(Button button)
         {
             var rt = (RectTransform)button.transform;
             var screen = RectTransformUtility.WorldToScreenPoint(null, rt.TransformPoint(rt.rect.center));
             Set(_mouse.position, screen);
             yield return null;
-            Click(_mouse.leftButton);
             yield return null;
+        }
+
+        protected IEnumerator HoldMouse()
+        {
+            Press(_mouse.leftButton);
+            yield return null;
+        }
+
+        protected IEnumerator ReleaseMouse()
+        {
+            Release(_mouse.leftButton);
+            yield return null;
+        }
+
+        protected IEnumerator Tap(ButtonControl control)
+        {
+            Press(control);
+            yield return null;
+            Release(control);
             yield return null;
         }
     }

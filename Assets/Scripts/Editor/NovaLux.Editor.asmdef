@@ -1,0 +1,11 @@
+{
+    "name": "NovaLux.Editor",
+    "rootNamespace": "NovaLux.EditorTools",
+    "references": [
+        "NovaLux.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "autoReferenced": true
+}

@@ -55,8 +55,6 @@ namespace NovaLux.Tests
             base.TearDown();
         }
 
-        static TMP_Text LabelOf(Button button) => button.transform.Find("Label").GetComponent<TMP_Text>();
-
         [UnityTest]
         public IEnumerator TitleButtons_ReadTheme()
         {
