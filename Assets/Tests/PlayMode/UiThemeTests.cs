@@ -16,6 +16,8 @@ namespace NovaLux.Tests
         static readonly Color TextColor = new Color(0f, 1f, 0f);
         static readonly Color HandleColor = new Color(1f, 1f, 0f);
         static readonly Color PanelColor = new Color(0f, 1f, 1f);
+        static readonly Color ChipColor = new Color(1f, 0f, 1f);
+        static readonly Color TrackColor = new Color(0.5f, 0f, 0.5f);
 
         UiTheme _theme;
         string _dir;
@@ -33,6 +35,8 @@ namespace NovaLux.Tests
             _theme.textColor = TextColor;
             _theme.handleColor = HandleColor;
             _theme.panelColor = PanelColor;
+            _theme.secondaryChipColor = ChipColor;
+            _theme.sliderTrackColor = TrackColor;
             _theme.fontSize = 33;
             _theme.smallFontSize = 29;
             _theme.fontKo = Resources.Load<UiTheme>("UiTheme").fontKo;
@@ -111,23 +115,23 @@ namespace NovaLux.Tests
             yield return Click(FindButton("Settings"));
 
             var panel = Object.FindObjectsByType<SettingsPanel>().Single().transform;
-            Assert.AreEqual(PanelColor, panel.GetComponent<Image>().color);
+            Assert.AreEqual(PanelColor, panel.Find("Card").GetComponent<Image>().color);
 
             var label = panel.Find("LabelBgm").GetComponent<TMP_Text>();
             Assert.AreEqual(33, label.fontSize);
             Assert.AreEqual(TextColor, label.color);
 
             var slider = panel.Find("Bgm");
-            Assert.AreEqual(ButtonColor, slider.Find("Background").GetComponent<Image>().color);
+            Assert.AreEqual(TrackColor, slider.Find("Background").GetComponent<Image>().color);
             Assert.AreEqual(AccentColor, slider.Find("Fill Area/Fill").GetComponent<Image>().color);
             Assert.AreEqual(HandleColor, slider.Find("Handle Slide Area/Handle").GetComponent<Image>().color);
 
-            Assert.AreEqual(ButtonColor, ((Image)FindButton("Close").targetGraphic).color);
+            Assert.AreEqual(ChipColor, ((Image)FindButton("Close").targetGraphic).color);
             Assert.AreEqual(29, LabelOf(FindButton("DisplayMode")).fontSize);
 
-            // 기본 해상도 인덱스 1(1080)이 선택 색, 나머지는 버튼 색.
+            // 기본 해상도 인덱스 1(1080)이 선택 색, 나머지는 칩 색.
             Assert.AreEqual(AccentColor, ((Image)FindButton("Res1080").targetGraphic).color);
-            Assert.AreEqual(ButtonColor, ((Image)FindButton("Res720").targetGraphic).color);
+            Assert.AreEqual(ChipColor, ((Image)FindButton("Res720").targetGraphic).color);
         }
     }
 }

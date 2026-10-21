@@ -25,6 +25,11 @@ namespace NovaLux.EditorTools
             theme.iconGallery = Save("icon_gallery", 128, 128, Gallery, Vector4.zero);
             theme.iconSettings = Save("icon_settings", 128, 128, Gear, Vector4.zero);
             theme.iconQuit = Save("icon_quit", 128, 128, Power, Vector4.zero);
+            theme.iconBgm = Save("icon_bgm", 128, 128, Note, Vector4.zero);
+            theme.iconSfx = Save("icon_sfx", 128, 128, Speaker, Vector4.zero);
+            theme.iconVoice = Save("icon_voice", 128, 128, Microphone, Vector4.zero);
+            theme.iconTextSpeed = Save("icon_textspeed", 128, 128, FastForward, Vector4.zero);
+            theme.iconAuto = Save("icon_auto", 128, 128, Clock, Vector4.zero);
             EditorUtility.SetDirty(theme);
             AssetDatabase.SaveAssets();
         }
@@ -55,8 +60,9 @@ namespace NovaLux.EditorTools
             importer.spritePixelsPerUnit = 100f;
             importer.spriteBorder = border;
             importer.alphaIsTransparency = true;
-            importer.mipmapEnabled = false;
-            importer.filterMode = FilterMode.Bilinear;
+            // 화면에서는 원본보다 3~10배 작게 그려진다. 밉맵 없이 줄이면 가장자리 알파가 0/1로 끊겨 계단이 진다.
+            importer.mipmapEnabled = true;
+            importer.filterMode = FilterMode.Trilinear;
             importer.wrapMode = TextureWrapMode.Clamp;
             importer.npotScale = TextureImporterNPOTScale.None;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
@@ -118,6 +124,60 @@ namespace NovaLux.EditorTools
             ring = Mathf.Max(ring, -wedge);
             var bar = Capsule(p, new Vector2(64f, 62f), new Vector2(64f, 100f), 5f);
             return Mathf.Min(ring, bar);
+        }
+
+        static float Note(Vector2 p)
+        {
+            var head = Vector2.Distance(p, new Vector2(48f, 36f)) - 15f;
+            var stem = Capsule(p, new Vector2(60f, 40f), new Vector2(60f, 100f), 5f);
+            var flag = Capsule(p, new Vector2(60f, 100f), new Vector2(92f, 78f), 5f);
+            return Mathf.Min(head, Mathf.Min(stem, flag));
+        }
+
+        static float Speaker(Vector2 p)
+        {
+            var body = Polygon(p, new[]
+            {
+                new Vector2(22f, 52f), new Vector2(40f, 52f), new Vector2(64f, 28f), new Vector2(64f, 100f),
+                new Vector2(40f, 76f), new Vector2(22f, 76f),
+            }) - 3f;
+            var q = p - new Vector2(64f, 64f);
+            var angle = Mathf.Abs(Mathf.Atan2(q.y, q.x));
+            var d = body;
+            foreach (var r in new[] { 24f, 40f })
+            {
+                // 오른쪽 ±40도 호만 남긴다.
+                var wave = Mathf.Max(Mathf.Abs(q.magnitude - r) - 4f, (angle - 40f * Mathf.Deg2Rad) * r);
+                d = Mathf.Min(d, wave);
+            }
+            return d;
+        }
+
+        static float Microphone(Vector2 p)
+        {
+            var capsule = Capsule(p, new Vector2(64f, 70f), new Vector2(64f, 88f), 17f);
+            var q = p - new Vector2(64f, 70f);
+            // 아래쪽 반원 호(U자)
+            var arc = Mathf.Max(Mathf.Abs(q.magnitude - 30f) - 5f, q.y);
+            var stand = Capsule(p, new Vector2(64f, 40f), new Vector2(64f, 24f), 5f);
+            var foot = Capsule(p, new Vector2(46f, 22f), new Vector2(82f, 22f), 5f);
+            return Mathf.Min(Mathf.Min(capsule, arc), Mathf.Min(stand, foot));
+        }
+
+        static float FastForward(Vector2 p)
+        {
+            var a = Polygon(p, new[] { new Vector2(24f, 34f), new Vector2(24f, 94f), new Vector2(62f, 64f) }) - 6f;
+            var b = Polygon(p, new[] { new Vector2(66f, 34f), new Vector2(66f, 94f), new Vector2(104f, 64f) }) - 6f;
+            return Mathf.Min(a, b);
+        }
+
+        static float Clock(Vector2 p)
+        {
+            var q = p - new Vector2(64f, 64f);
+            var ring = Mathf.Abs(q.magnitude - 38f) - 6f;
+            var hour = Capsule(p, new Vector2(64f, 64f), new Vector2(64f, 90f), 4.5f);
+            var minute = Capsule(p, new Vector2(64f, 64f), new Vector2(82f, 54f), 4.5f);
+            return Mathf.Min(ring, Mathf.Min(hour, minute));
         }
 
         // --- 도형 부품 ---

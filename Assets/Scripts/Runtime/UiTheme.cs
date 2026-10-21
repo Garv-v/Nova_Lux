@@ -8,19 +8,24 @@ namespace NovaLux
     public class UiTheme : ScriptableObject
     {
         public Color buttonColor = new Color32(0xF0, 0xF7, 0xFF, 255);
-        public Color accentColor = new Color32(0x3C, 0x8A, 0xE0, 255);
+        public Color accentColor = new Color32(0x2C, 0x74, 0xC9, 255);
         public Color textColor = new Color32(0x26, 0x43, 0x5F, 255);
-        public Color handleColor = new Color32(0x26, 0x43, 0x5F, 255);
-        public Color panelColor = new Color32(0xD1, 0xE3, 0xF5, 255);
+        public Color handleColor = Color.white;
+        public Color panelColor = new Color32(0xF0, 0xF7, 0xFF, 255);
 
         // 알약 버튼 상태 색. 선택·호버·포커스는 accentColor로 채우고 selectedTextColor 글자를 쓴다.
         public Color selectedTextColor = Color.white;
-        public Color pressedColor = new Color32(0x2C, 0x74, 0xC9, 255);
+        public Color pressedColor = new Color32(0x22, 0x5F, 0xA8, 255);
         public Color disabledColor = new Color32(0x94, 0xAE, 0xC6, 255);
         public Color chipColor = new Color32(0xCF, 0xE5, 0xFB, 255);
         public Color iconColor = new Color32(0x28, 0x78, 0xCC, 255);
         public Color selectedChipColor = Color.white;
         public Color disabledChipColor = new Color32(0xE1, 0xEE, 0xFA, 255);
+
+        // 환경설정: 쉬는 선택 칩, 슬라이더 트랙, 패널 뒤를 어둡게 덮는 막
+        public Color secondaryChipColor = new Color32(0xE1, 0xEE, 0xFA, 255);
+        public Color sliderTrackColor = new Color32(0xD1, 0xE3, 0xF5, 255);
+        public Color scrimColor = new Color32(0x26, 0x43, 0x5F, 140);
 
         // 9-slice 알약 면, 아이콘 칩(원), 초기화면 메뉴 아이콘. null이면 단색 사각형이 된다.
         public Sprite pillSprite;
@@ -30,6 +35,13 @@ namespace NovaLux
         public Sprite iconGallery;
         public Sprite iconSettings;
         public Sprite iconQuit;
+
+        // 환경설정 항목 아이콘
+        public Sprite iconBgm;
+        public Sprite iconSfx;
+        public Sprite iconVoice;
+        public Sprite iconTextSpeed;
+        public Sprite iconAuto;
 
         public int fontSize = 40;
         public int smallFontSize = 36;
@@ -61,11 +73,17 @@ namespace NovaLux
         public float resStep = 125f;
         public Vector2 closeButtonSize = new Vector2(300f, 80f);
         public float closeOffsetY = -20f;
+        public Vector2 cardSize = new Vector2(1320f, 860f);
+        public float cardOffsetY = -15f;
+        public float cardCornerRadius = 56f;
+        public float rowChipX = -575f;
+        public float rowChipSize = 64f;
+        public float rowIconSize = 36f;
 
-        // 슬라이더 내부
-        public float sliderFillInset = 12f;
-        public float sliderHandleInset = 15f;
-        public float sliderHandleWidth = 30f;
+        // 슬라이더 내부와 포커스 테두리
+        public float sliderTrackHeight = 20f;
+        public float sliderHandleSize = 40f;
+        public float focusRingWidth = 4f;
 
         static UiTheme _current;
 
