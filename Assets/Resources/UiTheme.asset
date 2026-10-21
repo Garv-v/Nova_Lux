@@ -12,17 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885222f09637a9e4d93b83ded45d3a8f, type: 3}
   m_Name: UiTheme
   m_EditorClassIdentifier: NovaLux.Runtime::NovaLux.UiTheme
-  buttonColor: {r: 0.25, g: 0.25, b: 0.3, a: 1}
-  accentColor: {r: 0.45, g: 0.6, b: 0.9, a: 1}
-  textColor: {r: 1, g: 1, b: 1, a: 1}
-  handleColor: {r: 1, g: 1, b: 1, a: 1}
-  panelColor: {r: 0.05, g: 0.05, b: 0.08, a: 1}
+  buttonColor: {r: 0.9411765, g: 0.96862745, b: 1, a: 1}
+  accentColor: {r: 0.23529412, g: 0.5411765, b: 0.8784314, a: 1}
+  textColor: {r: 0.14901961, g: 0.2627451, b: 0.37254903, a: 1}
+  handleColor: {r: 0.14901961, g: 0.2627451, b: 0.37254903, a: 1}
+  panelColor: {r: 0.81960785, g: 0.8901961, b: 0.9607843, a: 1}
+  selectedTextColor: {r: 1, g: 1, b: 1, a: 1}
+  pressedColor: {r: 0.17254902, g: 0.45490196, b: 0.7882353, a: 1}
+  disabledColor: {r: 0.5803922, g: 0.68235296, b: 0.7764706, a: 1}
+  chipColor: {r: 0.8117647, g: 0.8980392, b: 0.9843137, a: 1}
+  iconColor: {r: 0.15686275, g: 0.47058824, b: 0.8, a: 1}
+  selectedChipColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledChipColor: {r: 0.88235295, g: 0.93333334, b: 0.98039216, a: 1}
+  pillSprite: {fileID: 21300000, guid: 0d3980843ad99f349815f51f6d63e101, type: 3}
+  circleSprite: {fileID: 21300000, guid: 675894c016c09764d8723fd4056ab819, type: 3}
+  iconNewGame: {fileID: 21300000, guid: 5a5da36d6db1ee440a6ff4391bc1b1e2, type: 3}
+  iconContinue: {fileID: 21300000, guid: cc1cfe7613fae354bad67b4add558665, type: 3}
+  iconGallery: {fileID: 21300000, guid: 56b08f11161bf2041b7573333bf37576, type: 3}
+  iconSettings: {fileID: 21300000, guid: 5ea270fb1d7bd234c89af3cfb93b1bd7, type: 3}
+  iconQuit: {fileID: 21300000, guid: ac07aab18a13b44418aa225633160f60, type: 3}
   fontSize: 40
   smallFontSize: 36
   fontKo: {fileID: 11400000, guid: 9758d594a7275154d9580b229e6859cb, type: 2}
   fontJa: {fileID: 11400000, guid: a71d27578280a1d4799732f5b0e1aedf, type: 2}
   titleButtonSize: {x: 480, y: 90}
   titleButtonGap: 24
+  titleMenuX: -560
+  titleChipSize: 64
+  titleChipInset: 13
+  titleIconSize: 36
+  titleLabelGap: 20
   rowGap: 95
   firstRowY: 330
   labelX: -300

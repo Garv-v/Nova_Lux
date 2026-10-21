@@ -24,6 +24,40 @@ namespace NovaLux
             return button;
         }
 
+        // 초기화면용 알약 버튼: 9-slice 면, 왼쪽의 아이콘 칩, 칩 오른쪽의 라벨.
+        public static PillButton NewPillButton(Transform parent, string id, string label, Sprite icon, Vector2 position,
+            Vector2 size, int fontSize)
+        {
+            var theme = UiTheme.Current;
+            var face = NewImage(id, parent, theme.buttonColor);
+            face.sprite = theme.pillSprite;
+            face.type = theme.pillSprite != null ? Image.Type.Sliced : Image.Type.Simple;
+            Place(face.rectTransform, position, size);
+            var button = face.gameObject.AddComponent<PillButton>();
+
+            var chip = NewImage("Chip", face.transform, theme.chipColor);
+            chip.sprite = theme.circleSprite;
+            chip.raycastTarget = false;
+            var chipRect = chip.rectTransform;
+            chipRect.anchorMin = chipRect.anchorMax = chipRect.pivot = new Vector2(0f, 0.5f);
+            chipRect.anchoredPosition = new Vector2(theme.titleChipInset, 0f);
+            chipRect.sizeDelta = new Vector2(theme.titleChipSize, theme.titleChipSize);
+
+            var iconImage = NewImage("Icon", chip.transform, theme.iconColor);
+            iconImage.sprite = icon;
+            iconImage.enabled = icon != null;
+            iconImage.raycastTarget = false;
+            Place(iconImage.rectTransform, Vector2.zero, new Vector2(theme.titleIconSize, theme.titleIconSize));
+
+            var text = NewLabel(face.transform, "Label", label, fontSize, TextAlignmentOptions.Left);
+            Stretch(text.rectTransform);
+            text.rectTransform.offsetMin = new Vector2(theme.titleChipInset + theme.titleChipSize + theme.titleLabelGap, 0f);
+
+            button.targetGraphic = face;
+            button.Bind(theme, text, chip, iconImage);
+            return button;
+        }
+
         public static TextMeshProUGUI NewLabel(Transform parent, string name, string content, int size,
             TextAlignmentOptions alignment)
         {
