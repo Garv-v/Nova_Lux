@@ -38,6 +38,42 @@ namespace NovaLux.Tests
             Assert.AreEqual(0.8f, s.voice, 1e-4f);
             Assert.AreEqual(40f, s.textCps, 1e-4f);
             Assert.AreEqual(1.5f, s.autoDelaySec, 1e-4f);
+            Assert.IsTrue(s.fullscreen);
+            Assert.AreEqual(1, s.resolution);
+        }
+
+        [Test]
+        public void Reload_OldFileWithoutDisplayKeys_UsesDisplayDefaults()
+        {
+            File.WriteAllText(_path, "{\"bgm\":0.2,\"sfx\":0.8,\"voice\":0.8,\"textCps\":40,\"autoDelaySec\":1.5}");
+
+            Settings.Reload();
+
+            Assert.IsTrue(Settings.Current.fullscreen);
+            Assert.AreEqual(1, Settings.Current.resolution);
+        }
+
+        [Test]
+        public void Reload_ClampsResolutionIndex()
+        {
+            File.WriteAllText(_path, "{\"resolution\":9}");
+            Settings.Reload();
+            Assert.AreEqual(3, Settings.Current.resolution);
+
+            File.WriteAllText(_path, "{\"resolution\":-1}");
+            Settings.Reload();
+            Assert.AreEqual(0, Settings.Current.resolution);
+        }
+
+        [Test]
+        public void Set_DisplayChoice_SurvivesReload()
+        {
+            Settings.Set(s => { s.fullscreen = false; s.resolution = 3; });
+
+            Settings.Reload();
+
+            Assert.IsFalse(Settings.Current.fullscreen);
+            Assert.AreEqual(3, Settings.Current.resolution);
         }
 
         [Test]
@@ -130,6 +166,55 @@ namespace NovaLux.Tests
             Assert.AreEqual(0.3f, Settings.Current.bgm, 1e-4f);
             Assert.AreEqual(70f, Settings.Current.textCps, 1e-4f);
             Assert.AreEqual(3f, Settings.Current.autoDelaySec, 1e-4f);
+        }
+
+        [UnityTest]
+        public IEnumerator DisplayModeButton_TogglesWindowed_AppliesAndSaves()
+        {
+            yield return LoadTitle();
+            yield return Click(FindButton("Settings"));
+
+            yield return Click(FindButton("DisplayMode"));
+
+            Assert.AreEqual(1, ScreenCalls.Count);
+            Assert.AreEqual((1920, 1080, FullScreenMode.Windowed), ScreenCalls[0]);
+            Assert.AreEqual("창모드", FindButton("DisplayMode").GetComponentInChildren<Text>().text);
+            Settings.Reload();
+            Assert.IsFalse(Settings.Current.fullscreen);
+        }
+
+        [UnityTest]
+        public IEnumerator ResolutionButtons_Apply_AndSave()
+        {
+            yield return LoadTitle();
+            yield return Click(FindButton("Settings"));
+
+            yield return Click(FindButton("Res2160"));
+
+            Assert.AreEqual((3840, 2160, FullScreenMode.FullScreenWindow), ScreenCalls[ScreenCalls.Count - 1]);
+            Settings.Reload();
+            Assert.AreEqual(3, Settings.Current.resolution);
+        }
+
+        [UnityTest]
+        public IEnumerator PanelReopen_ShowsSavedDisplayChoice()
+        {
+            Settings.Set(s => { s.fullscreen = false; s.resolution = 2; });
+            yield return LoadTitle();
+            yield return Click(FindButton("Settings"));
+
+            Assert.AreEqual("창모드", FindButton("DisplayMode").GetComponentInChildren<Text>().text);
+        }
+
+        [UnityTest]
+        public IEnumerator SliderChange_DoesNotCallScreenApply()
+        {
+            yield return LoadTitle();
+            yield return Click(FindButton("Settings"));
+
+            FindSlider("Bgm").value = 0.1f;
+
+            Assert.AreEqual(0, ScreenCalls.Count);
         }
     }
 }

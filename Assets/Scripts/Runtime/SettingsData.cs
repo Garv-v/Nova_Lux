@@ -12,9 +12,13 @@ namespace NovaLux
         public float voice = 0.8f;
         public float textCps = 40f;
         public float autoDelaySec = 1.5f;
+        public bool fullscreen = true;
+        // ScreenSettings.Resolutions의 인덱스. 1 = 1080p.
+        public int resolution = 1;
 
         public void Clamp()
         {
+            resolution = Mathf.Clamp(resolution, 0, ScreenSettings.Resolutions.Length - 1);
             bgm = Mathf.Clamp01(bgm);
             sfx = Mathf.Clamp01(sfx);
             voice = Mathf.Clamp01(voice);
