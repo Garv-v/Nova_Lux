@@ -31,6 +31,13 @@ namespace NovaLux
         public Sprite iconSettings;
         public Sprite iconQuit;
 
+        // 환경설정 항목 아이콘
+        public Sprite iconBgm;
+        public Sprite iconSfx;
+        public Sprite iconVoice;
+        public Sprite iconTextSpeed;
+        public Sprite iconAuto;
+
         public int fontSize = 40;
         public int smallFontSize = 36;
 
