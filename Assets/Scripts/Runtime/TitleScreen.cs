@@ -9,10 +9,6 @@ namespace NovaLux
     // 임시 박스 UI. 아트와 문자열 표는 이후 티켓에서 바꾼다.
     public class TitleScreen : MonoBehaviour
     {
-        const float ButtonWidth = 480f;
-        const float ButtonHeight = 90f;
-        const float ButtonGap = 24f;
-
         void Awake()
         {
             var canvas = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
@@ -38,29 +34,12 @@ namespace NovaLux
         static void AddButton(Transform parent, int index, string id, string label, bool interactable,
             UnityEngine.Events.UnityAction onClick)
         {
-            var go = new GameObject(id, typeof(RectTransform), typeof(Image), typeof(Button));
-            go.transform.SetParent(parent, false);
-            var rt = (RectTransform)go.transform;
-            rt.sizeDelta = new Vector2(ButtonWidth, ButtonHeight);
-            rt.anchoredPosition = new Vector2(0f, 2f * (ButtonHeight + ButtonGap) - index * (ButtonHeight + ButtonGap));
-
-            go.GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.3f);
-            var button = go.GetComponent<Button>();
+            var theme = UiTheme.Current;
+            var step = theme.titleButtonSize.y + theme.titleButtonGap;
+            var button = UiKit.NewButton(parent, id, label, new Vector2(0f, 2f * step - index * step),
+                theme.titleButtonSize, theme.fontSize);
             button.interactable = interactable;
             if (onClick != null) button.onClick.AddListener(onClick);
-
-            var text = new GameObject("Label", typeof(RectTransform), typeof(Text)).GetComponent<Text>();
-            text.transform.SetParent(go.transform, false);
-            var trt = (RectTransform)text.transform;
-            trt.anchorMin = Vector2.zero;
-            trt.anchorMax = Vector2.one;
-            trt.offsetMin = trt.offsetMax = Vector2.zero;
-            text.text = label;
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = 40;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.color = Color.white;
-            text.raycastTarget = false;
         }
     }
 }

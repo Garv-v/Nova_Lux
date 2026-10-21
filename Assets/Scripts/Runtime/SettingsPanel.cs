@@ -7,16 +7,10 @@ namespace NovaLux
     // 임시 박스 UI. 값을 바꾸면 즉시 Settings에 저장한다.
     public class SettingsPanel : MonoBehaviour
     {
-        const float RowGap = 95f;
-        const float FirstRowY = 330f;
-
         public static SettingsPanel Create(Transform canvas)
         {
-            var go = new GameObject("SettingsPanel", typeof(RectTransform), typeof(Image));
-            go.transform.SetParent(canvas, false);
-            Stretch((RectTransform)go.transform);
-            go.GetComponent<Image>().color = new Color(0.05f, 0.05f, 0.08f, 1f);
-            return go.AddComponent<SettingsPanel>();
+            var panel = UiKit.NewPanel(canvas, "SettingsPanel");
+            return panel.gameObject.AddComponent<SettingsPanel>();
         }
 
         void Awake()
@@ -33,10 +27,11 @@ namespace NovaLux
 
         void AddDisplayRows(SettingsData s)
         {
-            var modeY = FirstRowY - 5 * RowGap;
+            var theme = UiTheme.Current;
+            var modeY = RowY(5);
             AddLabel("DisplayMode", "화면 모드", modeY);
-            var mode = AddButton("DisplayMode", ModeLabel(s.fullscreen), new Vector2(250f, modeY),
-                new Vector2(500f, 60f), Normal);
+            var mode = AddButton("DisplayMode", ModeLabel(s.fullscreen), new Vector2(theme.controlX, modeY),
+                theme.modeButtonSize);
             var modeText = mode.GetComponentInChildren<Text>();
             mode.onClick.AddListener(() =>
             {
@@ -45,15 +40,15 @@ namespace NovaLux
                 ScreenSettings.Apply(Settings.Current);
             });
 
-            var resY = FirstRowY - 6 * RowGap;
+            var resY = RowY(6);
             AddLabel("Resolution", "해상도", resY);
             var buttons = new Button[ScreenSettings.Resolutions.Length];
             for (var i = 0; i < buttons.Length; i++)
             {
                 var index = i;
-                var x = 57.5f + i * 125f;
+                var x = theme.resFirstX + i * theme.resStep;
                 buttons[i] = AddButton("Res" + ScreenSettings.Resolutions[i].y, ScreenSettings.ResolutionNames[i],
-                    new Vector2(x, resY), new Vector2(115f, 60f), Normal);
+                    new Vector2(x, resY), theme.resButtonSize);
                 buttons[i].onClick.AddListener(() =>
                 {
                     Settings.Set(d => d.resolution = index);
@@ -64,126 +59,45 @@ namespace NovaLux
             Highlight(buttons, s.resolution);
         }
 
-        static string ModeLabel(bool fullscreen) => fullscreen ? "전체화면" : "창모드";
+        static float RowY(int row) => UiTheme.Current.firstRowY - row * UiTheme.Current.rowGap;
 
-        static readonly Color Normal = new Color(0.25f, 0.25f, 0.3f);
-        static readonly Color Selected = new Color(0.45f, 0.6f, 0.9f);
+        static string ModeLabel(bool fullscreen) => fullscreen ? "전체화면" : "창모드";
 
         static void Highlight(Button[] buttons, int selected)
         {
+            var theme = UiTheme.Current;
             for (var i = 0; i < buttons.Length; i++)
-                ((Image)buttons[i].targetGraphic).color = i == selected ? Selected : Normal;
+                ((Image)buttons[i].targetGraphic).color = i == selected ? theme.accentColor : theme.buttonColor;
         }
 
         void AddLabel(string id, string label, float y)
         {
-            var text = AddText(transform, "Label" + id, label, 40, TextAnchor.MiddleRight);
-            Place((RectTransform)text.transform, new Vector2(-300f, y), new Vector2(420f, 60f));
+            var theme = UiTheme.Current;
+            var text = UiKit.NewLabel(transform, "Label" + id, label, theme.fontSize, TextAnchor.MiddleRight);
+            UiKit.Place(text.rectTransform, new Vector2(theme.labelX, y), theme.labelSize);
         }
 
-        Button AddButton(string id, string label, Vector2 position, Vector2 size, Color color)
-        {
-            var image = NewImage(id, transform, color);
-            Place(image.rectTransform, position, size);
-            var button = image.gameObject.AddComponent<Button>();
-            var text = AddText(image.transform, "Label", label, 36, TextAnchor.MiddleCenter);
-            Stretch((RectTransform)text.transform);
-            return button;
-        }
+        Button AddButton(string id, string label, Vector2 position, Vector2 size) =>
+            UiKit.NewButton(transform, id, label, position, size, UiTheme.Current.smallFontSize);
 
         void AddRow(int row, string id, string label, float min, float max, bool whole, float value,
             Action<SettingsData, float> apply)
         {
-            var y = FirstRowY - row * RowGap;
+            var y = RowY(row);
             AddLabel(id, label, y);
 
-            var slider = AddSlider(id, min, max, whole, value);
-            Place((RectTransform)slider.transform, new Vector2(250f, y), new Vector2(500f, 40f));
+            var slider = UiKit.NewSlider(transform, id, min, max, whole, value);
+            var theme = UiTheme.Current;
+            UiKit.Place((RectTransform)slider.transform, new Vector2(theme.controlX, y), theme.sliderSize);
             slider.onValueChanged.AddListener(v => Settings.Set(d => apply(d, v)));
-        }
-
-        Slider AddSlider(string id, float min, float max, bool whole, float value)
-        {
-            var root = new GameObject(id, typeof(RectTransform), typeof(Slider));
-            root.transform.SetParent(transform, false);
-
-            var bg = NewImage("Background", root.transform, new Color(0.25f, 0.25f, 0.3f));
-            Stretch(bg.rectTransform);
-
-            var fillArea = new GameObject("Fill Area", typeof(RectTransform)).GetComponent<RectTransform>();
-            fillArea.SetParent(root.transform, false);
-            Stretch(fillArea);
-            fillArea.offsetMin = new Vector2(0f, 12f);
-            fillArea.offsetMax = new Vector2(0f, -12f);
-            var fill = NewImage("Fill", fillArea, new Color(0.45f, 0.6f, 0.9f));
-            fill.rectTransform.anchorMin = Vector2.zero;
-            fill.rectTransform.anchorMax = Vector2.one;
-            fill.rectTransform.sizeDelta = Vector2.zero;
-
-            var handleArea = new GameObject("Handle Slide Area", typeof(RectTransform)).GetComponent<RectTransform>();
-            handleArea.SetParent(root.transform, false);
-            Stretch(handleArea);
-            handleArea.offsetMin = new Vector2(15f, 0f);
-            handleArea.offsetMax = new Vector2(-15f, 0f);
-            var handle = NewImage("Handle", handleArea, Color.white);
-            handle.rectTransform.sizeDelta = new Vector2(30f, 0f);
-
-            var slider = root.GetComponent<Slider>();
-            slider.fillRect = fill.rectTransform;
-            slider.handleRect = handle.rectTransform;
-            slider.targetGraphic = handle;
-            slider.direction = Slider.Direction.LeftToRight;
-            slider.minValue = min;
-            slider.maxValue = max;
-            slider.wholeNumbers = whole;
-            slider.SetValueWithoutNotify(value);
-            return slider;
         }
 
         void AddCloseButton()
         {
-            var image = NewImage("Close", transform, new Color(0.25f, 0.25f, 0.3f));
-            Place(image.rectTransform, new Vector2(0f, FirstRowY - 7 * RowGap - 20f), new Vector2(300f, 80f));
-            var button = image.gameObject.AddComponent<Button>();
+            var theme = UiTheme.Current;
+            var button = UiKit.NewButton(transform, "Close", "닫기", new Vector2(0f, RowY(7) + theme.closeOffsetY),
+                theme.closeButtonSize, theme.fontSize);
             button.onClick.AddListener(() => Destroy(gameObject));
-
-            var text = AddText(image.transform, "Label", "닫기", 40, TextAnchor.MiddleCenter);
-            Stretch((RectTransform)text.transform);
-        }
-
-        static Image NewImage(string name, Transform parent, Color color)
-        {
-            var image = new GameObject(name, typeof(RectTransform), typeof(Image)).GetComponent<Image>();
-            image.transform.SetParent(parent, false);
-            image.color = color;
-            return image;
-        }
-
-        static Text AddText(Transform parent, string name, string content, int size, TextAnchor anchor)
-        {
-            var text = new GameObject(name, typeof(RectTransform), typeof(Text)).GetComponent<Text>();
-            text.transform.SetParent(parent, false);
-            text.text = content;
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-            text.fontSize = size;
-            text.alignment = anchor;
-            text.color = Color.white;
-            text.raycastTarget = false;
-            return text;
-        }
-
-        static void Stretch(RectTransform rt)
-        {
-            rt.anchorMin = Vector2.zero;
-            rt.anchorMax = Vector2.one;
-            rt.offsetMin = rt.offsetMax = Vector2.zero;
-        }
-
-        static void Place(RectTransform rt, Vector2 position, Vector2 size)
-        {
-            rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
-            rt.anchoredPosition = position;
-            rt.sizeDelta = size;
         }
     }
 }
