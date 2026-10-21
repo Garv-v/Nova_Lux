@@ -158,6 +158,9 @@ namespace NovaLux.Tests
             yield return LoadTitle();
 
             var button = FindButton("Continue");
+            button.interactable = false;
+            yield return null;
+
             Assert.AreEqual(Normal, Face(button).color);
             Assert.AreEqual(Disabled, LabelOf(button).color);
             Assert.AreEqual(DisabledChip, Find(button, "Chip").color);

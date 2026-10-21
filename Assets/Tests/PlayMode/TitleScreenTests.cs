@@ -10,15 +10,29 @@ namespace NovaLux.Tests
     public class TitleScreenTests : UiTestFixture
     {
         [UnityTest]
-        public IEnumerator Title_ShowsFiveButtons_ContinueDisabled()
+        public IEnumerator Title_ShowsFiveInteractableButtons()
         {
             yield return LoadTitle();
 
             var buttons = Object.FindObjectsByType<Button>();
             Assert.AreEqual(5, buttons.Length);
-            foreach (var id in new[] { "NewGame", "Gallery", "Settings", "Quit" })
+            foreach (var id in new[] { "NewGame", "Continue", "Gallery", "Settings", "Quit" })
                 Assert.IsTrue(FindButton(id).interactable, id);
-            Assert.IsFalse(FindButton("Continue").interactable);
+        }
+
+        // 이어하기는 선택·호버 색은 바뀌지만, 저장 데이터가 생기기 전까지 눌러도 아무 일이 없다.
+        [UnityTest]
+        public IEnumerator Click_Continue_DoesNothing()
+        {
+            yield return LoadTitle();
+
+            yield return Click(FindButton("Continue"));
+            yield return null;
+
+            Assert.AreEqual(SceneNames.Title, UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            Assert.AreEqual(0, Object.FindObjectsByType<SettingsPanel>().Length);
+            Assert.AreEqual(0, QuitCalls);
+            Assert.AreSame(FindButton("Continue").gameObject, Selected);
         }
 
         [UnityTest]
