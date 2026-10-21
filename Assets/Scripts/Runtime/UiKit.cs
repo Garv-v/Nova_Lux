@@ -55,7 +55,7 @@ namespace NovaLux
             Outline ring = null;
             if (ringFocus)
             {
-                ring = face.gameObject.AddComponent<Outline>();
+                ring = face.gameObject.AddComponent<RoundOutline>();
                 ring.effectDistance = new Vector2(theme.focusRingWidth, -theme.focusRingWidth);
             }
             button.targetGraphic = face;
@@ -138,7 +138,7 @@ namespace NovaLux
             var handle = NewImage("Handle", handleArea, theme.handleColor);
             handle.sprite = theme.circleSprite;
             handle.rectTransform.sizeDelta = new Vector2(theme.sliderHandleSize, 0f);
-            var ring = handle.gameObject.AddComponent<Outline>();
+            var ring = handle.gameObject.AddComponent<RoundOutline>();
             ring.effectDistance = new Vector2(theme.focusRingWidth, -theme.focusRingWidth);
 
             var slider = root.GetComponent<PillSlider>();

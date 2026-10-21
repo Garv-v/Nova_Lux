@@ -60,8 +60,9 @@ namespace NovaLux.EditorTools
             importer.spritePixelsPerUnit = 100f;
             importer.spriteBorder = border;
             importer.alphaIsTransparency = true;
-            importer.mipmapEnabled = false;
-            importer.filterMode = FilterMode.Bilinear;
+            // 화면에서는 원본보다 3~10배 작게 그려진다. 밉맵 없이 줄이면 가장자리 알파가 0/1로 끊겨 계단이 진다.
+            importer.mipmapEnabled = true;
+            importer.filterMode = FilterMode.Trilinear;
             importer.wrapMode = TextureWrapMode.Clamp;
             importer.npotScale = TextureImporterNPOTScale.None;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
