@@ -41,6 +41,8 @@ namespace NovaLux
 
         public static void Layout(int w, int h)
         {
+            if (_instance == null) return;
+
             var r = Fit(w, h);
             foreach (var camera in Camera.allCameras) camera.rect = r;
 

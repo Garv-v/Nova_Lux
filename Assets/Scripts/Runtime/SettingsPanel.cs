@@ -34,8 +34,7 @@ namespace NovaLux
         void AddDisplayRows(SettingsData s)
         {
             var modeY = FirstRowY - 5 * RowGap;
-            var modeLabel = AddText(transform, "LabelDisplayMode", "화면 모드", 40, TextAnchor.MiddleRight);
-            Place((RectTransform)modeLabel.transform, new Vector2(-300f, modeY), new Vector2(420f, 60f));
+            AddLabel("DisplayMode", "화면 모드", modeY);
             var mode = AddButton("DisplayMode", ModeLabel(s.fullscreen), new Vector2(250f, modeY),
                 new Vector2(500f, 60f), Normal);
             var modeText = mode.GetComponentInChildren<Text>();
@@ -47,16 +46,14 @@ namespace NovaLux
             });
 
             var resY = FirstRowY - 6 * RowGap;
-            var resLabel = AddText(transform, "LabelResolution", "해상도", 40, TextAnchor.MiddleRight);
-            Place((RectTransform)resLabel.transform, new Vector2(-300f, resY), new Vector2(420f, 60f));
-            var ids = new[] { "Res720", "Res1080", "Res1440", "Res2160" };
-            var names = new[] { "720p", "1080p", "2K", "4K" };
-            var buttons = new Button[ids.Length];
-            for (var i = 0; i < ids.Length; i++)
+            AddLabel("Resolution", "해상도", resY);
+            var buttons = new Button[ScreenSettings.Resolutions.Length];
+            for (var i = 0; i < buttons.Length; i++)
             {
                 var index = i;
                 var x = 57.5f + i * 125f;
-                buttons[i] = AddButton(ids[i], names[i], new Vector2(x, resY), new Vector2(115f, 60f), Normal);
+                buttons[i] = AddButton("Res" + ScreenSettings.Resolutions[i].y, ScreenSettings.ResolutionNames[i],
+                    new Vector2(x, resY), new Vector2(115f, 60f), Normal);
                 buttons[i].onClick.AddListener(() =>
                 {
                     Settings.Set(d => d.resolution = index);
@@ -78,6 +75,12 @@ namespace NovaLux
                 ((Image)buttons[i].targetGraphic).color = i == selected ? Selected : Normal;
         }
 
+        void AddLabel(string id, string label, float y)
+        {
+            var text = AddText(transform, "Label" + id, label, 40, TextAnchor.MiddleRight);
+            Place((RectTransform)text.transform, new Vector2(-300f, y), new Vector2(420f, 60f));
+        }
+
         Button AddButton(string id, string label, Vector2 position, Vector2 size, Color color)
         {
             var image = NewImage(id, transform, color);
@@ -92,8 +95,7 @@ namespace NovaLux
             Action<SettingsData, float> apply)
         {
             var y = FirstRowY - row * RowGap;
-            var text = AddText(transform, "Label" + id, label, 40, TextAnchor.MiddleRight);
-            Place((RectTransform)text.transform, new Vector2(-300f, y), new Vector2(420f, 60f));
+            AddLabel(id, label, y);
 
             var slider = AddSlider(id, min, max, whole, value);
             Place((RectTransform)slider.transform, new Vector2(250f, y), new Vector2(500f, 40f));

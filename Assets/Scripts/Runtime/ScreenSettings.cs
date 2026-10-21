@@ -13,6 +13,8 @@ namespace NovaLux
             new Vector2Int(3840, 2160),
         };
 
+        public static readonly string[] ResolutionNames = { "720p", "1080p", "2K", "4K" };
+
         // 테스트가 화면 변경 호출을 가로채는 자리. null이면 실제로 적용한다.
         public static Action<int, int, FullScreenMode> Handler;
 
