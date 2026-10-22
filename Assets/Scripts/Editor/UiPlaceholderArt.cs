@@ -30,6 +30,7 @@ namespace NovaLux.EditorTools
             theme.iconVoice = Save("icon_voice", 128, 128, Microphone, Vector4.zero);
             theme.iconTextSpeed = Save("icon_textspeed", 128, 128, FastForward, Vector4.zero);
             theme.iconAuto = Save("icon_auto", 128, 128, Clock, Vector4.zero);
+            theme.iconLocked = Save("icon_locked", 128, 128, Lock, Vector4.zero);
             EditorUtility.SetDirty(theme);
             AssetDatabase.SaveAssets();
         }
@@ -99,6 +100,17 @@ namespace NovaLux.EditorTools
             var mountain = Polygon(p, new[] { new Vector2(40f, 42f), new Vector2(60f, 70f), new Vector2(80f, 42f) }) - 4f;
             var sun = Vector2.Distance(p, new Vector2(84f, 78f)) - 8f;
             return Mathf.Min(frame, Mathf.Min(mountain, sun));
+        }
+
+        static float Lock(Vector2 p)
+        {
+            var body = Box(p - new Vector2(64f, 44f), new Vector2(38f, 28f), 8f);
+            // 몸통 위의 U자 고리: 위쪽 반원 호와 양쪽 다리.
+            var q = p - new Vector2(64f, 76f);
+            var arc = Mathf.Max(Mathf.Abs(q.magnitude - 22f) - 6f, -q.y);
+            var legs = Mathf.Min(Capsule(p, new Vector2(42f, 76f), new Vector2(42f, 68f), 6f),
+                Capsule(p, new Vector2(86f, 76f), new Vector2(86f, 68f), 6f));
+            return Mathf.Min(body, Mathf.Min(arc, legs));
         }
 
         static float Gear(Vector2 p)
