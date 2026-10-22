@@ -27,6 +27,8 @@ MonoBehaviour:
   secondaryChipColor: {r: 0.88235295, g: 0.93333334, b: 0.98039216, a: 1}
   sliderTrackColor: {r: 0.81960785, g: 0.8901961, b: 0.9607843, a: 1}
   scrimColor: {r: 0.14901961, g: 0.2627451, b: 0.37254903, a: 0.54901963}
+  lockedSlotColor: {r: 0.8117647, g: 0.8980392, b: 0.9843137, a: 1}
+  lockedIconColor: {r: 0.5803922, g: 0.68235296, b: 0.7764706, a: 1}
   pillSprite: {fileID: 21300000, guid: 0d3980843ad99f349815f51f6d63e101, type: 3}
   circleSprite: {fileID: 21300000, guid: 675894c016c09764d8723fd4056ab819, type: 3}
   iconNewGame: {fileID: 21300000, guid: 5a5da36d6db1ee440a6ff4391bc1b1e2, type: 3}
@@ -39,6 +41,7 @@ MonoBehaviour:
   iconVoice: {fileID: 21300000, guid: 0d7b10d5df9a571428494b640a3701d9, type: 3}
   iconTextSpeed: {fileID: 21300000, guid: 104304b603b5c1a4caa1d0111383bd03, type: 3}
   iconAuto: {fileID: 21300000, guid: a4e0ae2f123056e42bfe22d4f04a7ee1, type: 3}
+  iconLocked: {fileID: 21300000, guid: a8393fcfa125d324783c51709302e7a4, type: 3}
   fontSize: 40
   smallFontSize: 36
   fontKo: {fileID: 11400000, guid: 9758d594a7275154d9580b229e6859cb, type: 2}
@@ -68,6 +71,14 @@ MonoBehaviour:
   rowChipX: -575
   rowChipSize: 64
   rowIconSize: 36
+  galleryTitleY: 340
+  galleryTitleSize: {x: 600, y: 70}
+  gallerySlotSize: {x: 220, y: 124}
+  gallerySlotGap: 24
+  galleryGridY: 10
+  gallerySlotCorner: 24
+  galleryLockSize: 56
+  galleryCloseY: -360
   sliderTrackHeight: 20
   sliderHandleSize: 40
   focusRingWidth: 4
