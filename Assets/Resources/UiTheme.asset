@@ -53,8 +53,8 @@ MonoBehaviour:
   titleChipInset: 13
   titleIconSize: 36
   titleLabelGap: 20
-  rowGap: 95
-  firstRowY: 330
+  rowGap: 84
+  firstRowY: 340
   labelX: -300
   controlX: 250
   labelSize: {x: 420, y: 60}

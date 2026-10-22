@@ -10,7 +10,7 @@ namespace NovaLux.Tests
     public class SettingsNavigationTests : UiTestFixture
     {
         static readonly string[] Order =
-            { "Bgm", "Sfx", "Voice", "TextSpeed", "AutoSpeed", "DisplayMode", "Res1080", "Close" };
+            { "Bgm", "Sfx", "Voice", "TextSpeed", "AutoSpeed", "DisplayMode", "Res1080", "LangKo", "Close" };
 
         public override void Setup()
         {
@@ -60,7 +60,7 @@ namespace NovaLux.Tests
                 AssertSelected(id);
             }
             yield return Tap(Gamepad.dpad.up);
-            AssertSelected("Res1080");
+            AssertSelected("LangKo");
         }
 
         [UnityTest]
@@ -120,7 +120,7 @@ namespace NovaLux.Tests
             Assert.AreEqual(3, Settings.Current.resolution);
             Assert.AreEqual(3840, ScreenCalls.Last().w);
             yield return Tap(Keyboard.downArrowKey);
-            AssertSelected("Close");
+            AssertSelected("LangKo");
             yield return Tap(Keyboard.upArrowKey);
             AssertSelected("Res2160");
         }
