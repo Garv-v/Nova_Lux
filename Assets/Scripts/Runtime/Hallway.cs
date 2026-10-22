@@ -6,9 +6,11 @@ namespace NovaLux
     [RequireComponent(typeof(SpriteRenderer))]
     public class Hallway : MonoBehaviour
     {
-        SpriteRenderer Background => GetComponent<SpriteRenderer>();
+        SpriteRenderer _background;
 
-        public float XMin => Background.bounds.min.x;
-        public float XMax => Background.bounds.max.x;
+        void Awake() => _background = GetComponent<SpriteRenderer>();
+
+        public float XMin => _background.bounds.min.x;
+        public float XMax => _background.bounds.max.x;
     }
 }
