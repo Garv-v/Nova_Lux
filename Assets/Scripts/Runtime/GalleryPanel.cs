@@ -12,13 +12,13 @@ namespace NovaLux
     public class GalleryPanel : MonoBehaviour
     {
         // 화면 문자열은 여기에 모은다(언어 표가 들어오면 이 자리를 옮긴다).
-        static class Text
+        static class Strings
         {
             public const string Title = "갤러리";
             public const string Close = "닫기";
         }
 
-        // 여주 4명 × 호감도 5구간(기획서 5.2). 타락도 컷신·엔딩 CG의 자리는 구조가 정해진 뒤에 더한다.
+        // 임시 배치(여주 4명 × 5구간 20자리). 기획서 13장은 갤러리 구성이 미확정이라 컷신 수와 종류가 정해지면 바꾼다.
         public const int Columns = 5;
         public const int Rows = 4;
 
@@ -43,7 +43,7 @@ namespace NovaLux
             var theme = UiTheme.Current;
             UiKit.NewCard(transform, "Card", new Vector2(0f, theme.cardOffsetY), theme.cardSize);
 
-            var title = UiKit.NewLabel(transform, "Title", Text.Title, theme.fontSize, TextAlignmentOptions.Center);
+            var title = UiKit.NewLabel(transform, "Title", Strings.Title, theme.fontSize, TextAlignmentOptions.Center);
             UiKit.Place(title.rectTransform, new Vector2(0f, theme.galleryTitleY), theme.galleryTitleSize);
 
             var step = theme.gallerySlotSize + Vector2.one * theme.gallerySlotGap;
@@ -55,7 +55,7 @@ namespace NovaLux
                 UiKit.NewLockedSlot(transform, $"Slot{row * Columns + col}", new Vector2(x, y));
             }
 
-            _close = UiKit.NewChipButton(transform, "Close", Text.Close, new Vector2(0f, theme.galleryCloseY),
+            _close = UiKit.NewChipButton(transform, "Close", Strings.Close, new Vector2(0f, theme.galleryCloseY),
                 theme.closeButtonSize, theme.fontSize, false);
             _close.onClick.AddListener(Close);
             // 자동 이동에 맡기면 뒤에 가려진 초기화면 버튼으로 새 나간다.
