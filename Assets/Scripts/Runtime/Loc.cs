@@ -33,6 +33,12 @@ namespace NovaLux
             ["settings.resolution"] = new[] { "해상도", "解像度" },
             ["settings.language"] = new[] { "언어", "言語" },
             ["settings.close"] = new[] { "닫기", "閉じる" },
+
+            ["hallway.enter"] = new[] { "입장", "入る" },
+            ["room.mine"] = new[] { "내 방", "自分の部屋" },
+            ["room.neighbor"] = new[] { "옆집", "隣の部屋" },
+            ["room.interact"] = new[] { "상호작용 (준비 중)", "インタラクト（準備中）" },
+            ["room.exit"] = new[] { "나가기", "出る" },
         };
 
         // 언어 선택 칩은 어느 언어 모드에서도 자기 언어 이름으로 보인다.
