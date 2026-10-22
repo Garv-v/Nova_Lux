@@ -11,7 +11,7 @@ namespace NovaLux
     public class TitleScreen : MonoBehaviour
     {
         InputSystemUIInputModule _module;
-        SettingsPanel _panel;
+        MonoBehaviour _panel;
 
         void Awake()
         {
@@ -31,7 +31,13 @@ namespace NovaLux
 
             AddButton(canvas.transform, 0, "NewGame", "title.newGame", UiTheme.Current.iconNewGame, () => SceneManager.LoadScene(SceneNames.Hallway));
             AddButton(canvas.transform, 1, "Continue", "title.continue", UiTheme.Current.iconContinue, null);
-            AddButton(canvas.transform, 2, "Gallery", "title.gallery", UiTheme.Current.iconGallery, null);
+            PillButton gallery = null;
+            gallery = AddButton(canvas.transform, 2, "Gallery", "title.gallery", UiTheme.Current.iconGallery, () =>
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                _panel = GalleryPanel.Create(canvas.transform,
+                    () => EventSystem.current.SetSelectedGameObject(gallery.gameObject));
+            });
             PillButton settings = null;
             settings = AddButton(canvas.transform, 3, "Settings", "title.settings", UiTheme.Current.iconSettings, () =>
             {

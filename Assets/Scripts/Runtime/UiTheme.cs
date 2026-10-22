@@ -27,6 +27,10 @@ namespace NovaLux
         public Color sliderTrackColor = new Color32(0xD1, 0xE3, 0xF5, 255);
         public Color scrimColor = new Color32(0x26, 0x43, 0x5F, 140);
 
+        // 갤러리: 잠긴 컷신 자리 면과 자물쇠 색
+        public Color lockedSlotColor = new Color32(0xCF, 0xE5, 0xFB, 255);
+        public Color lockedIconColor = new Color32(0x94, 0xAE, 0xC6, 255);
+
         // 9-slice 알약 면, 아이콘 칩(원), 초기화면 메뉴 아이콘. null이면 단색 사각형이 된다.
         public Sprite pillSprite;
         public Sprite circleSprite;
@@ -42,6 +46,9 @@ namespace NovaLux
         public Sprite iconVoice;
         public Sprite iconTextSpeed;
         public Sprite iconAuto;
+
+        // 갤러리 잠긴 자리의 자물쇠
+        public Sprite iconLocked;
 
         public int fontSize = 40;
         public int smallFontSize = 36;
@@ -82,6 +89,16 @@ namespace NovaLux
         public float rowChipX = -575f;
         public float rowChipSize = 64f;
         public float rowIconSize = 36f;
+
+        // 갤러리: 카드 안 제목, 잠긴 자리 격자(가운데 기준), 닫기 버튼
+        public float galleryTitleY = 340f;
+        public Vector2 galleryTitleSize = new Vector2(600f, 70f);
+        public Vector2 gallerySlotSize = new Vector2(220f, 124f);
+        public float gallerySlotGap = 24f;
+        public float galleryGridY = 10f;
+        public float gallerySlotCorner = 24f;
+        public float galleryLockSize = 56f;
+        public float galleryCloseY = -360f;
 
         // 슬라이더 내부와 포커스 테두리
         public float sliderTrackHeight = 20f;

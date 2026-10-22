@@ -23,6 +23,21 @@ namespace NovaLux
             return card;
         }
 
+        // 갤러리의 잠긴 컷신 자리: 둥근 사각 면 가운데에 자물쇠.
+        public static Image NewLockedSlot(Transform parent, string name, Vector2 position)
+        {
+            var theme = UiTheme.Current;
+            var slot = NewPillFace(name, parent, theme.lockedSlotColor, position, theme.gallerySlotSize);
+            slot.GetComponent<PillCorners>().Radius = theme.gallerySlotCorner;
+            slot.raycastTarget = false;
+            var icon = NewImage("Lock", slot.transform, theme.lockedIconColor);
+            icon.sprite = theme.iconLocked;
+            icon.enabled = theme.iconLocked != null;
+            icon.raycastTarget = false;
+            Place(icon.rectTransform, Vector2.zero, new Vector2(theme.galleryLockSize, theme.galleryLockSize));
+            return slot;
+        }
+
         // 초기화면용 알약 버튼: 9-slice 면, 왼쪽의 아이콘 칩, 칩 오른쪽의 라벨.
         public static PillButton NewPillButton(Transform parent, string id, string label, Sprite icon, Vector2 position,
             Vector2 size, int fontSize)

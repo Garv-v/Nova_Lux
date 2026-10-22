@@ -19,6 +19,9 @@ namespace NovaLux
             ["title.settings"] = new[] { "환경설정", "設定" },
             ["title.quit"] = new[] { "종료", "終了" },
 
+            ["gallery.title"] = new[] { "갤러리", "ギャラリー" },
+            ["gallery.close"] = new[] { "닫기", "閉じる" },
+
             ["settings.bgm"] = new[] { "BGM", "BGM" },
             ["settings.sfx"] = new[] { "효과음", "効果音" },
             ["settings.voice"] = new[] { "보이스", "ボイス" },
