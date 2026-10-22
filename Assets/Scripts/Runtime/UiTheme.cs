@@ -46,10 +46,10 @@ namespace NovaLux
         public int fontSize = 40;
         public int smallFontSize = 36;
 
-        // 언어별 서체. 언어 선택(#4)이 들어오기 전까지는 한국어를 쓴다. null이면 TMP 기본 서체.
+        // 언어별 서체. null이면 TMP 기본 서체.
         public TMP_FontAsset fontKo;
         public TMP_FontAsset fontJa;
-        public TMP_FontAsset Font => fontKo;
+        public TMP_FontAsset Font => Loc.Current == Language.Ja ? fontJa : fontKo;
 
         // 초기화면 (1920x1080 기준, 왼쪽 정렬 세로 배치)
         public Vector2 titleButtonSize = new Vector2(480f, 90f);
@@ -68,6 +68,9 @@ namespace NovaLux
         public Vector2 labelSize = new Vector2(420f, 60f);
         public Vector2 sliderSize = new Vector2(500f, 40f);
         public Vector2 modeButtonSize = new Vector2(500f, 60f);
+        public Vector2 langButtonSize = new Vector2(245f, 60f);
+        public float langFirstX = 125f;
+        public float langStep = 250f;
         public Vector2 resButtonSize = new Vector2(115f, 60f);
         public float resFirstX = 57.5f;
         public float resStep = 125f;

@@ -15,10 +15,12 @@ namespace NovaLux
         public bool fullscreen = true;
         // ScreenSettings.Resolutions의 인덱스. 1 = 1080p.
         public int resolution = 1;
+        public Language language = Language.Ko;
 
         public void Clamp()
         {
             resolution = Mathf.Clamp(resolution, 0, ScreenSettings.Resolutions.Length - 1);
+            if (!Enum.IsDefined(typeof(Language), language)) language = Language.Ko;
             bgm = Mathf.Clamp01(bgm);
             sfx = Mathf.Clamp01(sfx);
             voice = Mathf.Clamp01(voice);

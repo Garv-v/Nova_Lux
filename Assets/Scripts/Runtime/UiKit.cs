@@ -91,7 +91,7 @@ namespace NovaLux
                 .GetComponent<TextMeshProUGUI>();
             text.transform.SetParent(parent, false);
             text.text = content;
-            if (UiTheme.Current.Font != null) text.font = UiTheme.Current.Font;
+            text.gameObject.AddComponent<LocText>();
             text.fontSize = size;
             text.alignment = alignment;
             text.textWrappingMode = TextWrappingModes.NoWrap;

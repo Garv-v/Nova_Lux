@@ -18,6 +18,7 @@ namespace NovaLux
         readonly PillSlider[] _sliders = new PillSlider[5];
         PillButton _mode;
         PillButton[] _resolutions;
+        PillButton[] _languages;
         PillButton _close;
 
         // onClosed는 패널이 닫힌 직후 불린다(화면이 포커스를 되돌려 놓는 자리).
@@ -38,12 +39,12 @@ namespace NovaLux
             UiKit.NewCard(transform, "Card", new Vector2(0f, theme.cardOffsetY), theme.cardSize);
 
             var s = Settings.Current;
-            _sliders[0] = AddRow(0, "Bgm", "BGM", theme.iconBgm, 0f, 1f, false, s.bgm, 0.05f, (d, v) => d.bgm = v);
-            _sliders[1] = AddRow(1, "Sfx", "효과음", theme.iconSfx, 0f, 1f, false, s.sfx, 0.05f, (d, v) => d.sfx = v);
-            _sliders[2] = AddRow(2, "Voice", "보이스", theme.iconVoice, 0f, 1f, false, s.voice, 0.05f, (d, v) => d.voice = v);
-            _sliders[3] = AddRow(3, "TextSpeed", "텍스트 속도", theme.iconTextSpeed, 10f, 100f, true, s.textCps, 5f,
+            _sliders[0] = AddRow(0, "Bgm", "settings.bgm", theme.iconBgm, 0f, 1f, false, s.bgm, 0.05f, (d, v) => d.bgm = v);
+            _sliders[1] = AddRow(1, "Sfx", "settings.sfx", theme.iconSfx, 0f, 1f, false, s.sfx, 0.05f, (d, v) => d.sfx = v);
+            _sliders[2] = AddRow(2, "Voice", "settings.voice", theme.iconVoice, 0f, 1f, false, s.voice, 0.05f, (d, v) => d.voice = v);
+            _sliders[3] = AddRow(3, "TextSpeed", "settings.textSpeed", theme.iconTextSpeed, 10f, 100f, true, s.textCps, 5f,
                 (d, v) => d.textCps = v);
-            _sliders[4] = AddRow(4, "AutoSpeed", "자동 진행", theme.iconAuto, 0.5f, 5f, false, s.autoDelaySec, 0.25f,
+            _sliders[4] = AddRow(4, "AutoSpeed", "settings.autoSpeed", theme.iconAuto, 0.5f, 5f, false, s.autoDelaySec, 0.25f,
                 (d, v) => d.autoDelaySec = v);
             AddDisplayRows(s);
             AddCloseButton();
@@ -78,19 +79,20 @@ namespace NovaLux
         {
             var theme = UiTheme.Current;
             var modeY = RowY(5);
-            AddLabel("DisplayMode", "화면 모드", modeY);
-            _mode = AddChipButton("DisplayMode", ModeLabel(s.fullscreen), new Vector2(theme.controlX, modeY),
+            AddLabel("DisplayMode", "settings.displayMode", modeY);
+            _mode = AddChipButton("DisplayMode", Loc.Get(ModeKey(s.fullscreen)), new Vector2(theme.controlX, modeY),
                 theme.modeButtonSize, false);
-            var modeText = _mode.GetComponentInChildren<TMP_Text>();
+            var modeText = _mode.GetComponentInChildren<LocText>();
+            modeText.Key = ModeKey(s.fullscreen);
             _mode.onClick.AddListener(() =>
             {
                 Settings.Set(d => d.fullscreen = !d.fullscreen);
-                modeText.text = ModeLabel(Settings.Current.fullscreen);
+                modeText.Key = ModeKey(Settings.Current.fullscreen);
                 ScreenSettings.Apply(Settings.Current);
             });
 
             var resY = RowY(6);
-            AddLabel("Resolution", "해상도", resY);
+            AddLabel("Resolution", "settings.resolution", resY);
             _resolutions = new PillButton[ScreenSettings.Resolutions.Length];
             for (var i = 0; i < _resolutions.Length; i++)
             {
@@ -106,11 +108,34 @@ namespace NovaLux
                 });
             }
             ShowChecked(s.resolution);
+
+            var langY = RowY(7);
+            AddLabel("Language", "settings.language", langY);
+            _languages = new PillButton[Loc.LanguageNames.Length];
+            for (var i = 0; i < _languages.Length; i++)
+            {
+                var language = (Language)i;
+                var x = theme.langFirstX + i * theme.langStep;
+                _languages[i] = AddChipButton("Lang" + language, Loc.LanguageNames[i], new Vector2(x, langY),
+                    theme.langButtonSize, true);
+                _languages[i].onClick.AddListener(() =>
+                {
+                    Loc.Set(language);
+                    ShowLanguage();
+                });
+            }
+            ShowLanguage();
+        }
+
+        void ShowLanguage()
+        {
+            for (var i = 0; i < _languages.Length; i++) _languages[i].IsOn = i == (int)Loc.Current;
+            LinkNavigation();
         }
 
         static float RowY(int row) => UiTheme.Current.firstRowY - row * UiTheme.Current.rowGap;
 
-        static string ModeLabel(bool fullscreen) => fullscreen ? "전체화면" : "창모드";
+        static string ModeKey(bool fullscreen) => fullscreen ? "settings.fullscreen" : "settings.windowed";
 
         void ShowChecked(int selected)
         {
@@ -118,19 +143,23 @@ namespace NovaLux
             LinkNavigation();
         }
 
-        // 위아래는 항목 순서대로, 해상도 줄은 좌우로 잇는다. 슬라이더의 좌우는 비워 둬야 값 조정으로 쓰인다.
-        // 해상도 줄로 들어갈 때는 현재 선택된 해상도로 간다.
+        // 위아래는 항목 순서대로, 해상도·언어 줄은 좌우로 잇는다. 슬라이더의 좌우는 비워 둬야 값 조정으로 쓰인다.
+        // 해상도·언어 줄로 들어갈 때는 현재 선택된 칩으로 간다.
         void LinkNavigation()
         {
-            if (_close == null) return;
+            if (_close == null || _languages == null || _languages[_languages.Length - 1] == null) return;
             var current = _resolutions[Settings.Current.resolution];
             for (var i = 0; i < _sliders.Length; i++)
                 Link(_sliders[i], i > 0 ? _sliders[i - 1] : null, i < _sliders.Length - 1 ? _sliders[i + 1] : _mode);
             Link(_mode, _sliders[_sliders.Length - 1], current);
+            var language = _languages[(int)Loc.Current];
             for (var i = 0; i < _resolutions.Length; i++)
-                Link(_resolutions[i], _mode, _close, i > 0 ? _resolutions[i - 1] : null,
+                Link(_resolutions[i], _mode, language, i > 0 ? _resolutions[i - 1] : null,
                     i < _resolutions.Length - 1 ? _resolutions[i + 1] : null);
-            Link(_close, current, null);
+            for (var i = 0; i < _languages.Length; i++)
+                Link(_languages[i], current, _close, i > 0 ? _languages[i - 1] : null,
+                    i < _languages.Length - 1 ? _languages[i + 1] : null);
+            Link(_close, language, null);
         }
 
         static void Link(Selectable item, Selectable up, Selectable down, Selectable left = null, Selectable right = null)
@@ -145,22 +174,23 @@ namespace NovaLux
             };
         }
 
-        void AddLabel(string id, string label, float y)
+        void AddLabel(string id, string key, float y)
         {
             var theme = UiTheme.Current;
-            var text = UiKit.NewLabel(transform, "Label" + id, label, theme.fontSize, TextAlignmentOptions.Left);
+            var text = UiKit.NewLabel(transform, "Label" + id, Loc.Get(key), theme.fontSize, TextAlignmentOptions.Left);
+            text.GetComponent<LocText>().Key = key;
             UiKit.Place(text.rectTransform, new Vector2(theme.labelX, y), theme.labelSize);
         }
 
         PillButton AddChipButton(string id, string label, Vector2 position, Vector2 size, bool toggle) =>
             UiKit.NewChipButton(transform, id, label, position, size, UiTheme.Current.smallFontSize, toggle);
 
-        PillSlider AddRow(int row, string id, string label, Sprite icon, float min, float max, bool whole, float value,
+        PillSlider AddRow(int row, string id, string key, Sprite icon, float min, float max, bool whole, float value,
             float keyStep, Action<SettingsData, float> apply)
         {
             var theme = UiTheme.Current;
             var y = RowY(row);
-            AddLabel(id, label, y);
+            AddLabel(id, key, y);
             var chip = UiKit.NewIconChip(transform, "Chip" + id, icon, new Vector2(theme.rowChipX, y), theme.rowChipSize,
                 theme.rowIconSize, false);
 
@@ -175,8 +205,9 @@ namespace NovaLux
         void AddCloseButton()
         {
             var theme = UiTheme.Current;
-            _close = UiKit.NewChipButton(transform, "Close", "닫기", new Vector2(0f, RowY(7) + theme.closeOffsetY),
+            _close = UiKit.NewChipButton(transform, "Close", Loc.Get("settings.close"), new Vector2(0f, RowY(8) + theme.closeOffsetY),
                 theme.closeButtonSize, theme.fontSize, false);
+            _close.GetComponentInChildren<LocText>().Key = "settings.close";
             _close.onClick.AddListener(Close);
         }
     }
