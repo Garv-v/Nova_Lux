@@ -7,7 +7,7 @@ namespace NovaLux
     // 다른 Overlay 캔버스는 sortingOrder를 이보다 낮게 둔다.
     public class Letterbox : MonoBehaviour
     {
-        const float Aspect = 16f / 9f;
+        public const float Aspect = 16f / 9f;
         static Letterbox _instance;
         static RectTransform _left, _right, _bottom, _top;
 

@@ -63,6 +63,13 @@ namespace NovaLux.Tests
             yield return null;
         }
 
+        protected static IEnumerator LoadHallway()
+        {
+            SceneManager.LoadScene(SceneNames.Hallway);
+            yield return null;
+            yield return null;
+        }
+
         protected static Button FindButton(string id)
         {
             return Object.FindObjectsByType<Button>().Single(b => b.name == id);
@@ -112,6 +119,14 @@ namespace NovaLux.Tests
         {
             Press(control);
             yield return null;
+            Release(control);
+            yield return null;
+        }
+
+        protected IEnumerator Hold(ButtonControl control, int frames)
+        {
+            Press(control);
+            for (var i = 0; i < frames; i++) yield return null;
             Release(control);
             yield return null;
         }
