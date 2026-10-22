@@ -1,6 +1,7 @@
 using System.Collections;
 using System.IO;
 using System.Linq;
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -113,6 +114,17 @@ namespace NovaLux.Tests
         {
             Release(_mouse.leftButton);
             yield return null;
+        }
+
+        // 조건이 참이 될 때까지 최대 maxFrames 프레임을 기다린다. 넘으면 테스트를 실패시킨다.
+        protected static IEnumerator WaitUntil(System.Func<bool> condition, int maxFrames, string what)
+        {
+            for (var i = 0; i < maxFrames; i++)
+            {
+                if (condition()) yield break;
+                yield return null;
+            }
+            Assert.Fail($"{maxFrames}프레임 안에 {what}이(가) 되지 않았다");
         }
 
         protected IEnumerator Tap(ButtonControl control)
