@@ -30,6 +30,7 @@ namespace NovaLux.Tests
         public override void Setup()
         {
             base.Setup();
+            UseTempSettingsFile();
             _texture = new Texture2D(8, 8);
             _pill = NewSprite(new Vector4(3f, 3f, 3f, 3f));
             _circle = NewSprite(Vector4.zero);

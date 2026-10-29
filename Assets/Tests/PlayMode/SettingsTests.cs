@@ -11,23 +11,10 @@ namespace NovaLux.Tests
 {
     public class SettingsTests : UiTestFixture
     {
-        string _dir;
-        string _path;
-
         public override void Setup()
         {
             base.Setup();
-            _dir = Path.Combine(Path.GetTempPath(), "NovaLuxTests_" + System.Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(_dir);
-            _path = Path.Combine(_dir, "settings.json");
-            Settings.FilePath = _path;
-        }
-
-        public override void TearDown()
-        {
-            Settings.FilePath = null;
-            if (Directory.Exists(_dir)) Directory.Delete(_dir, true);
-            base.TearDown();
+            UseTempSettingsFile();
         }
 
         [Test]
@@ -47,7 +34,7 @@ namespace NovaLux.Tests
         [Test]
         public void Reload_OldFileWithoutDisplayKeys_UsesDisplayDefaults()
         {
-            File.WriteAllText(_path, "{\"bgm\":0.2,\"sfx\":0.8,\"voice\":0.8,\"textCps\":40,\"autoDelaySec\":1.5}");
+            File.WriteAllText(Settings.FilePath, "{\"bgm\":0.2,\"sfx\":0.8,\"voice\":0.8,\"textCps\":40,\"autoDelaySec\":1.5}");
 
             Settings.Reload();
 
@@ -58,11 +45,11 @@ namespace NovaLux.Tests
         [Test]
         public void Reload_ClampsResolutionIndex()
         {
-            File.WriteAllText(_path, "{\"resolution\":9}");
+            File.WriteAllText(Settings.FilePath, "{\"resolution\":9}");
             Settings.Reload();
             Assert.AreEqual(3, Settings.Current.resolution);
 
-            File.WriteAllText(_path, "{\"resolution\":-1}");
+            File.WriteAllText(Settings.FilePath, "{\"resolution\":-1}");
             Settings.Reload();
             Assert.AreEqual(0, Settings.Current.resolution);
         }
@@ -85,17 +72,17 @@ namespace NovaLux.Tests
 
             Settings.Reload();
 
-            Assert.IsTrue(File.Exists(_path));
+            Assert.IsTrue(File.Exists(Settings.FilePath));
             Assert.AreEqual(0.3f, Settings.Current.bgm, 1e-4f);
             Assert.AreEqual(70f, Settings.Current.textCps, 1e-4f);
             Assert.AreEqual(0.8f, Settings.Current.sfx, 1e-4f);
-            Assert.IsFalse(File.Exists(_path + ".tmp"));
+            Assert.IsFalse(File.Exists(Settings.FilePath + ".tmp"));
         }
 
         [Test]
         public void Reload_ClampsOutOfRangeValues()
         {
-            File.WriteAllText(_path, "{\"bgm\":5,\"sfx\":-1,\"voice\":0.5,\"textCps\":1000,\"autoDelaySec\":0}");
+            File.WriteAllText(Settings.FilePath, "{\"bgm\":5,\"sfx\":-1,\"voice\":0.5,\"textCps\":1000,\"autoDelaySec\":0}");
 
             Settings.Reload();
 
@@ -110,19 +97,19 @@ namespace NovaLux.Tests
         [Test]
         public void Reload_CorruptFile_KeepsBadCopy_AndUsesDefaults()
         {
-            File.WriteAllText(_path, "{not json");
+            File.WriteAllText(Settings.FilePath, "{not json");
 
             Settings.Reload();
 
             Assert.AreEqual(0.8f, Settings.Current.bgm, 1e-4f);
-            Assert.IsTrue(File.Exists(_path + ".bad"));
-            Assert.AreEqual("{not json", File.ReadAllText(_path + ".bad"));
+            Assert.IsTrue(File.Exists(Settings.FilePath + ".bad"));
+            Assert.AreEqual("{not json", File.ReadAllText(Settings.FilePath + ".bad"));
         }
 
         [Test]
         public void Reload_MissingKeys_FallBackToDefaults()
         {
-            File.WriteAllText(_path, "{\"bgm\":0.2}");
+            File.WriteAllText(Settings.FilePath, "{\"bgm\":0.2}");
 
             Settings.Reload();
 
@@ -183,12 +170,12 @@ namespace NovaLux.Tests
             slider.value = 0.6f;
 
             Assert.AreEqual(0.6f, Settings.Current.bgm, 1e-4f);
-            Assert.IsFalse(File.Exists(_path));
+            Assert.IsFalse(File.Exists(Settings.FilePath));
 
             ExecuteEvents.Execute(slider.gameObject, new PointerEventData(EventSystem.current),
                 ExecuteEvents.pointerUpHandler);
 
-            Assert.IsTrue(File.Exists(_path));
+            Assert.IsTrue(File.Exists(Settings.FilePath));
             Settings.Reload();
             Assert.AreEqual(0.6f, Settings.Current.bgm, 1e-4f);
         }
@@ -199,7 +186,7 @@ namespace NovaLux.Tests
             yield return LoadTitle();
             yield return Click(FindButton("Settings"));
             FindSlider("Sfx").value = 0.25f;
-            Assert.IsFalse(File.Exists(_path));
+            Assert.IsFalse(File.Exists(Settings.FilePath));
 
             yield return Click(FindButton("Close"));
 
@@ -217,7 +204,7 @@ namespace NovaLux.Tests
             ExecuteEvents.Execute(slider.gameObject, new PointerEventData(EventSystem.current),
                 ExecuteEvents.pointerUpHandler);
 
-            Assert.IsFalse(File.Exists(_path));
+            Assert.IsFalse(File.Exists(Settings.FilePath));
         }
 
         [UnityTest]

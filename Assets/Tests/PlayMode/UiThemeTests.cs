@@ -1,5 +1,4 @@
 using System.Collections;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using TMPro;
@@ -20,14 +19,11 @@ namespace NovaLux.Tests
         static readonly Color TrackColor = new Color(0.5f, 0f, 0.5f);
 
         UiTheme _theme;
-        string _dir;
 
         public override void Setup()
         {
             base.Setup();
-            _dir = Path.Combine(Path.GetTempPath(), "NovaLuxTests_" + System.Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(_dir);
-            Settings.FilePath = Path.Combine(_dir, "settings.json");
+            UseTempSettingsFile();
 
             _theme = ScriptableObject.CreateInstance<UiTheme>();
             _theme.buttonColor = ButtonColor;
@@ -54,8 +50,6 @@ namespace NovaLux.Tests
         {
             UiTheme.Current = null;
             Object.Destroy(_theme);
-            Settings.FilePath = null;
-            if (Directory.Exists(_dir)) Directory.Delete(_dir, true);
             base.TearDown();
         }
 

@@ -9,6 +9,12 @@ namespace NovaLux.Tests
 {
     public class TitleScreenTests : UiTestFixture
     {
+        public override void Setup()
+        {
+            base.Setup();
+            UseTempSettingsFile();
+        }
+
         [UnityTest]
         public IEnumerator Title_ShowsFiveInteractableButtons()
         {
