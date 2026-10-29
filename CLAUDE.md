@@ -2,6 +2,8 @@
 
 Unity 6000.6.2f1, 2D URP. 팀 규칙은 [README.md](README.md), 게임 규칙·수치는 [docs/02-기획서.md](docs/02-기획서.md), 용어는 [CONTEXT.md](CONTEXT.md), 되돌리기 어려운 결정은 [docs/adr/](docs/adr/).
 
+패키지·렌더링·UI·입력·테스트 관련 기능을 새로 구현하거나 버전을 올리기 전에 [docs/07-유니티-최신-기술스택.md](docs/07-유니티-최신-기술스택.md)를 읽는다(2026-10-29 공식 자료 기준, 오래됐으면 다시 확인).
+
 ## Unity 에디터 제어
 
 에디터가 열려 있으면 씬·프리팹·에셋 파일(YAML)을 직접 고치지 않고 에디터를 조작한다. 먼저 `unity status`로 연결(state `ready`)을 확인한다.
@@ -19,6 +21,7 @@ UnityMCP가 먼저인 작업: C# 작성 전 API 확인(`unity_reflect`, `unity_d
 - uGUI는 전용 도구가 없다. `set_serialized_field`, `set_component_properties`로 RectTransform 등의 값을 쓰고, 매번 스크린샷으로 확인한다.
 - 에셋 이동·이름 변경은 `move_asset`, `rename_asset`으로 한다(GUID 유지).
 - PlayMode 테스트는 `run_tests`가 0/0이므로 [docs/test-runner-0of0.md](docs/test-runner-0of0.md)의 절차로 돌린다.
+- 테스트에서 키·포인터 입력을 넣을 때는 [docs/05-테스트-이음새.md](docs/05-테스트-이음새.md)를 먼저 읽는다(Unity CLI에는 입력 주입 도구가 없다).
 
 ## Agent skills
 
