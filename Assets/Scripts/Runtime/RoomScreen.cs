@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace NovaLux
@@ -21,16 +20,7 @@ namespace NovaLux
 
         public static RoomScreen Open(Door door, Action onExit)
         {
-            var go = new GameObject("RoomScreen", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            var canvas = go.GetComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 100;
-            var scaler = go.GetComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920, 1080);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
-
-            var room = go.AddComponent<RoomScreen>();
+            var room = UiKit.NewScreenCanvas("RoomScreen", null, 100).gameObject.AddComponent<RoomScreen>();
             room._door = door;
             room._onExit = onExit;
             room.Build();
@@ -41,9 +31,7 @@ namespace NovaLux
         {
             var theme = UiTheme.Current;
 
-            if (FindFirstObjectByType<EventSystem>() == null)
-                new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule))
-                    .transform.SetParent(transform, false);
+            UiKit.EnsureEventSystem(transform);
 
             var scrim = UiKit.NewPanel(transform, "Scrim", theme.scrimColor);
             scrim.raycastTarget = true;

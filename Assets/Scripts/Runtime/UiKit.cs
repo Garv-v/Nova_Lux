@@ -1,5 +1,7 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace NovaLux
@@ -7,6 +9,28 @@ namespace NovaLux
     // 화면들이 함께 쓰는 UI 부품. 색과 글자 크기는 UiTheme.Current에서 읽는다.
     public static class UiKit
     {
+        // 기준 해상도 1920x1080의 화면용 캔버스. 16:9가 아닌 화면에서도 이 영역이 레터박스 안쪽에 들어가게 한다.
+        public static Canvas NewScreenCanvas(string name, Transform parent, int sortingOrder)
+        {
+            var go = new GameObject(name, typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+            if (parent != null) go.transform.SetParent(parent, false);
+            var canvas = go.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = sortingOrder;
+            var scaler = go.GetComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+            return canvas;
+        }
+
+        public static void EnsureEventSystem(Transform parent)
+        {
+            if (Object.FindFirstObjectByType<EventSystem>() == null)
+                new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule))
+                    .transform.SetParent(parent, false);
+        }
+
         public static Image NewPanel(Transform parent, string name, Color color)
         {
             var image = NewImage(name, parent, color);
