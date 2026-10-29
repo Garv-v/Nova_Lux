@@ -1,5 +1,4 @@
 using System.Collections;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using TMPro;
@@ -12,22 +11,11 @@ namespace NovaLux.Tests
 {
     public class FontTests : UiTestFixture
     {
-        string _dir;
-
         public override void Setup()
         {
             base.Setup();
-            _dir = Path.Combine(Path.GetTempPath(), "NovaLuxTests_" + System.Guid.NewGuid().ToString("N"));
-            Directory.CreateDirectory(_dir);
-            Settings.FilePath = Path.Combine(_dir, "settings.json");
+            UseTempSettingsFile();
             UiTheme.Current = null;
-        }
-
-        public override void TearDown()
-        {
-            Settings.FilePath = null;
-            if (Directory.Exists(_dir)) Directory.Delete(_dir, true);
-            base.TearDown();
         }
 
         // 서체 자신이나 fallback 중 하나라도 글리프를 가지면 보인다.
