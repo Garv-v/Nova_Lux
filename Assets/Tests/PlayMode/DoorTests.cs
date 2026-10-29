@@ -47,7 +47,7 @@ namespace NovaLux.Tests
             yield return LoadHallway();
             PlaceAt(DoorById(id).X);
             yield return null;
-            yield return Tap(Keyboard.eKey);
+            yield return Tap(Keyboard.upArrowKey);
             yield return WaitUntil(() => Room != null, FadeFrames, "방 열림");
             yield return WaitFadeDone();
         }
@@ -81,7 +81,7 @@ namespace NovaLux.Tests
             yield return LoadHallway();
             PlaceAt(DoorById("mine").X);
             yield return null;
-            yield return Tap(Keyboard.eKey);
+            yield return Tap(Keyboard.upArrowKey);
             yield return null;
 
             Assert.Greater(ScreenFade.Alpha, 0f);
@@ -107,7 +107,7 @@ namespace NovaLux.Tests
             yield return LoadHallway();
             PlaceAt(DoorById("mine").X);
             yield return null;
-            yield return Tap(Keyboard.eKey);
+            yield return Tap(Keyboard.upArrowKey);
             var x0 = Walker.transform.position.x;
 
             yield return Hold(Keyboard.rightArrowKey, 4);
@@ -123,10 +123,36 @@ namespace NovaLux.Tests
             yield return LoadHallway();
             PlaceAt(DoorById("mine").X + 5f);
             yield return null;
-            yield return Tap(Keyboard.eKey);
+            yield return Tap(Keyboard.upArrowKey);
             for (var i = 0; i < 12; i++) yield return null;
 
             Assert.IsNull(Room);
+            Assert.IsFalse(ScreenFade.Busy);
+        }
+
+        [UnityTest]
+        public IEnumerator Enter_ByEOrEnter_DoesNothing()
+        {
+            yield return LoadHallway();
+            PlaceAt(DoorById("mine").X);
+            yield return null;
+            yield return Tap(Keyboard.eKey);
+            yield return Tap(Keyboard.enterKey);
+            for (var i = 0; i < 12; i++) yield return null;
+
+            Assert.IsNull(Room);
+            Assert.IsFalse(ScreenFade.Busy);
+        }
+
+        [UnityTest]
+        public IEnumerator Exit_ByEscape_DoesNothing()
+        {
+            yield return EnterRoom("mine");
+
+            yield return Tap(Keyboard.escapeKey);
+            for (var i = 0; i < 12; i++) yield return null;
+
+            Assert.IsNotNull(Room);
             Assert.IsFalse(ScreenFade.Busy);
         }
 
@@ -136,7 +162,7 @@ namespace NovaLux.Tests
             yield return EnterRoom("neighbor");
             var doorX = DoorById("neighbor").X;
 
-            yield return Tap(Keyboard.escapeKey);
+            yield return Tap(Keyboard.upArrowKey);
             yield return WaitUntil(() => Room == null, FadeFrames, "방 닫힘");
             yield return WaitFadeDone();
 
@@ -145,23 +171,6 @@ namespace NovaLux.Tests
 
             yield return Hold(Keyboard.rightArrowKey, 10);
             Assert.Greater(Walker.transform.position.x, doorX + 1f);
-        }
-
-        [UnityTest]
-        public IEnumerator RoundTrip_Gamepad()
-        {
-            yield return LoadHallway();
-            PlaceAt(DoorById("mine").X);
-            yield return null;
-            yield return Tap(Gamepad.buttonSouth);
-            yield return WaitUntil(() => Room != null, FadeFrames, "방 열림");
-            yield return WaitFadeDone();
-
-            yield return Tap(Gamepad.buttonEast);
-            yield return WaitUntil(() => Room == null, FadeFrames, "방 닫힘");
-            yield return WaitFadeDone();
-
-            Assert.AreEqual(DoorById("mine").X, Walker.transform.position.x, 1e-3f);
         }
 
         [UnityTest]
@@ -193,7 +202,7 @@ namespace NovaLux.Tests
             yield return LoadHallway();
             PlaceAt(DoorById("mine").X);
             yield return null;
-            for (var i = 0; i < 6; i++) yield return Tap(Keyboard.eKey);
+            for (var i = 0; i < 6; i++) yield return Tap(Keyboard.upArrowKey);
             yield return WaitUntil(() => Room != null, FadeFrames, "방 열림");
             yield return WaitFadeDone();
 

@@ -20,7 +20,8 @@ namespace NovaLux
             _module = FindFirstObjectByType<InputSystemUIInputModule>();
 
             AddButton(canvas, 0, "NewGame", "title.newGame", UiTheme.Current.iconNewGame, () => SceneManager.LoadScene(SceneNames.Hallway));
-            AddButton(canvas, 1, "Continue", "title.continue", UiTheme.Current.iconContinue, null);
+            // 세이브 구조가 생기기 전까지 비활성. 저장 파일이 있을 때만 활성화한다.
+            AddButton(canvas, 1, "Continue", "title.continue", UiTheme.Current.iconContinue, null).interactable = false;
             PillButton gallery = null;
             gallery = AddButton(canvas, 2, "Gallery", "title.gallery", UiTheme.Current.iconGallery, () =>
             {

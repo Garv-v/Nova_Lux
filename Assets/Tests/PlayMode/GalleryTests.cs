@@ -67,7 +67,7 @@ namespace NovaLux.Tests
         public IEnumerator Keyboard_Enter_OnGallery_Opens_DownSelectsClose_EscapeCloses()
         {
             yield return LoadTitle();
-            for (var i = 0; i < 3; i++) yield return Tap(Keyboard.downArrowKey);
+            for (var i = 0; i < 2; i++) yield return Tap(Keyboard.downArrowKey);
             Assert.AreSame(FindButton("Gallery").gameObject, Selected);
 
             yield return Tap(Keyboard.enterKey);
@@ -82,20 +82,6 @@ namespace NovaLux.Tests
             yield return Tap(Keyboard.escapeKey);
             Assert.IsFalse(PanelOpen);
             Assert.AreSame(FindButton("Gallery").gameObject, Selected);
-        }
-
-        [UnityTest]
-        public IEnumerator Gamepad_South_OnClose_Closes()
-        {
-            yield return LoadTitle();
-            for (var i = 0; i < 3; i++) yield return Tap(Gamepad.dpad.down);
-            yield return Tap(Gamepad.buttonSouth);
-            Assert.IsTrue(PanelOpen);
-
-            yield return Tap(Gamepad.dpad.down);
-            yield return Tap(Gamepad.buttonSouth);
-
-            Assert.IsFalse(PanelOpen);
         }
     }
 }

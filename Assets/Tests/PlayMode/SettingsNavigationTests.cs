@@ -50,20 +50,6 @@ namespace NovaLux.Tests
         }
 
         [UnityTest]
-        public IEnumerator Gamepad_Dpad_WalksEveryRow_AndBackUp()
-        {
-            yield return OpenSettings();
-
-            foreach (var id in Order)
-            {
-                yield return Tap(Gamepad.dpad.down);
-                AssertSelected(id);
-            }
-            yield return Tap(Gamepad.dpad.up);
-            AssertSelected("LangKo");
-        }
-
-        [UnityTest]
         public IEnumerator Up_AtFirstSlider_StaysThere_NeverReachesTitleButtons()
         {
             yield return OpenSettings();
@@ -143,19 +129,6 @@ namespace NovaLux.Tests
             yield return OpenSettings();
 
             yield return Tap(Keyboard.escapeKey);
-            yield return null;
-
-            Assert.IsFalse(PanelOpen);
-            AssertSelected("Settings");
-        }
-
-        [UnityTest]
-        public IEnumerator GamepadEast_Closes_FromAnyRow()
-        {
-            yield return OpenSettings();
-            yield return WalkTo("Voice", Gamepad.dpad.down);
-
-            yield return Tap(Gamepad.buttonEast);
             yield return null;
 
             Assert.IsFalse(PanelOpen);

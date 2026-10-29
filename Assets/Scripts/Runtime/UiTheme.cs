@@ -82,6 +82,8 @@ namespace NovaLux
         public float resFirstX = 57.5f;
         public float resStep = 125f;
         public Vector2 closeButtonSize = new Vector2(300f, 80f);
+        public Vector2 pauseButtonSize = new Vector2(480f, 90f);
+        public float pauseButtonGap = 24f;
         public float closeOffsetY = -20f;
         public Vector2 cardSize = new Vector2(1320f, 860f);
         public float cardOffsetY = -15f;
