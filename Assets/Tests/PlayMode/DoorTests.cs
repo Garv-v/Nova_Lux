@@ -16,6 +16,7 @@ namespace NovaLux.Tests
         public override void Setup()
         {
             base.Setup();
+            UseTempSettingsFile();
             Time.captureDeltaTime = Frame;
         }
 
@@ -202,7 +203,6 @@ namespace NovaLux.Tests
         [UnityTest]
         public IEnumerator Prompt_FollowsLanguage()
         {
-            UseTempSettingsFile();
             yield return LoadHallway();
             PlaceAt(DoorById("mine").X);
             yield return null;

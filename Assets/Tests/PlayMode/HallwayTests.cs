@@ -12,6 +12,7 @@ namespace NovaLux.Tests
         public override void Setup()
         {
             base.Setup();
+            UseTempSettingsFile();
             Time.captureDeltaTime = Frame;
         }
 

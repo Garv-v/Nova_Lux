@@ -9,6 +9,12 @@ namespace NovaLux.Tests
 {
     public class GalleryTests : UiTestFixture
     {
+        public override void Setup()
+        {
+            base.Setup();
+            UseTempSettingsFile();
+        }
+
         static bool PanelOpen => Object.FindObjectsByType<GalleryPanel>().Length > 0;
 
         static Image[] Slots => Object.FindObjectsByType<Image>().Where(i => i.name.StartsWith("Slot")).ToArray();

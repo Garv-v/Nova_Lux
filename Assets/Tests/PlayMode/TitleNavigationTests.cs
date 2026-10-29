@@ -7,6 +7,12 @@ namespace NovaLux.Tests
 {
     public class TitleNavigationTests : UiTestFixture
     {
+        public override void Setup()
+        {
+            base.Setup();
+            UseTempSettingsFile();
+        }
+
         [UnityTest]
         public IEnumerator Keyboard_Down_WalksAllFiveButtons_AndBackUp()
         {
