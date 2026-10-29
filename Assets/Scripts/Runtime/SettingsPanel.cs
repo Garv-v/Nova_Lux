@@ -1,40 +1,28 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
 namespace NovaLux
 {
     // 둥근 카드 위의 환경설정. 값을 바꾸면 즉시 Settings에 저장한다.
     // 키보드·패드는 패널 안에서만 움직이도록 이동 경로를 직접 이어 둔다(뒤에 가려진 초기화면 버튼으로 새지 않게).
-    public class SettingsPanel : MonoBehaviour
+    public class SettingsPanel : ModalPanel
     {
-        InputSystemUIInputModule _module;
-        Action _onClosed;
-        bool _closing;
-
         readonly PillSlider[] _sliders = new PillSlider[5];
         PillButton _mode;
         PillButton[] _resolutions;
         PillButton[] _languages;
         PillButton _close;
 
-        // onClosed는 패널이 닫힌 직후 불린다(화면이 포커스를 되돌려 놓는 자리).
-        public static SettingsPanel Create(Transform canvas, Action onClosed)
-        {
-            var root = UiKit.NewPanel(canvas, "SettingsPanel", UiTheme.Current.scrimColor);
-            // 막은 기준 해상도 영역(레터박스 안쪽)만 덮는다. 캔버스 전체에 펴면 16:9가 아닌 화면의 검은 띠까지 번진다.
-            UiKit.Place(root.rectTransform, Vector2.zero, canvas.GetComponentInParent<CanvasScaler>().referenceResolution);
-            var panel = root.gameObject.AddComponent<SettingsPanel>();
-            panel._onClosed = onClosed;
-            return panel;
-        }
+        public static SettingsPanel Create(Transform canvas, Action onClosed) => Open<SettingsPanel>(canvas, onClosed);
 
-        void Awake()
+        // 선택된 것이 없을 때 방향 입력이 오면 첫 슬라이더부터 고른다. 열자마자 고르면 마우스로 열어도 채워져 보인다.
+        protected override GameObject FirstSelection => _sliders[0].gameObject;
+
+        protected override void Awake()
         {
-            _module = FindFirstObjectByType<InputSystemUIInputModule>();
+            base.Awake();
             var theme = UiTheme.Current;
             UiKit.NewCard(transform, "Card", new Vector2(0f, theme.cardOffsetY), theme.cardSize);
 
@@ -53,27 +41,6 @@ namespace NovaLux
 
         // 놓지 못한 채 닫히거나 씬이 바뀌어도 마지막 값이 남게 한다.
         void OnDestroy() => Settings.SaveIfDirty();
-
-        void Update()
-        {
-            if (_closing || _module == null || _module.cancel == null) return;
-            if (_module.cancel.action.WasPressedThisFrame()) Close();
-        }
-
-        // 선택된 것이 없을 때 방향 입력이 오면 첫 슬라이더부터 고른다. 열자마자 고르면 마우스로 열어도 채워져 보인다.
-        void LateUpdate()
-        {
-            if (!_closing && UiNav.MoveWithoutSelection(_module))
-                EventSystem.current.SetSelectedGameObject(_sliders[0].gameObject);
-        }
-
-        void Close()
-        {
-            if (_closing) return;
-            _closing = true;
-            Destroy(gameObject);
-            _onClosed?.Invoke();
-        }
 
         void AddDisplayRows(SettingsData s)
         {
