@@ -27,7 +27,7 @@ namespace NovaLux
 
         static ScreenFade Create()
         {
-            var go = new GameObject("ScreenFade", typeof(Canvas), typeof(ScreenFade));
+            var go = new GameObject("ScreenFade", typeof(Canvas), typeof(GraphicRaycaster), typeof(ScreenFade));
             var canvas = go.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 900;
@@ -42,7 +42,8 @@ namespace NovaLux
             _busy = true;
             _veil.raycastTarget = true;
             yield return Ramp(0f, 1f);
-            atBlack?.Invoke();
+            try { atBlack?.Invoke(); }
+            catch (Exception e) { Debug.LogException(e); }
             yield return Ramp(1f, 0f);
             _veil.raycastTarget = false;
             _busy = false;
