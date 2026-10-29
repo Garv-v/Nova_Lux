@@ -47,7 +47,7 @@ namespace NovaLux
             var theme = UiTheme.Current;
             var modeY = RowY(5);
             AddLabel("DisplayMode", "settings.displayMode", modeY);
-            _mode = AddChipButton("DisplayMode", Loc.Get(ModeKey(s.fullscreen)), new Vector2(theme.controlX, modeY),
+            _mode = AddChipButton("DisplayMode", "", new Vector2(theme.controlX, modeY),
                 theme.modeButtonSize, false);
             var modeText = _mode.GetComponentInChildren<LocText>();
             modeText.Key = ModeKey(s.fullscreen);
@@ -144,7 +144,7 @@ namespace NovaLux
         void AddLabel(string id, string key, float y)
         {
             var theme = UiTheme.Current;
-            var text = UiKit.NewLabel(transform, "Label" + id, Loc.Get(key), theme.fontSize, TextAlignmentOptions.Left);
+            var text = UiKit.NewLabel(transform, "Label" + id, "", theme.fontSize, TextAlignmentOptions.Left);
             text.GetComponent<LocText>().Key = key;
             UiKit.Place(text.rectTransform, new Vector2(theme.labelX, y), theme.labelSize);
         }
@@ -172,7 +172,7 @@ namespace NovaLux
         void AddCloseButton()
         {
             var theme = UiTheme.Current;
-            _close = UiKit.NewChipButton(transform, "Close", Loc.Get("settings.close"), new Vector2(0f, RowY(8) + theme.closeOffsetY),
+            _close = UiKit.NewChipButton(transform, "Close", "", new Vector2(0f, RowY(8) + theme.closeOffsetY),
                 theme.closeButtonSize, theme.fontSize, false);
             _close.GetComponentInChildren<LocText>().Key = "settings.close";
             _close.onClick.AddListener(Close);

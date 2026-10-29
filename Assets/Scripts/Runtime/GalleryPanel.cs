@@ -26,7 +26,7 @@ namespace NovaLux
             var theme = UiTheme.Current;
             UiKit.NewCard(transform, "Card", new Vector2(0f, theme.cardOffsetY), theme.cardSize);
 
-            var title = UiKit.NewLabel(transform, "Title", Loc.Get("gallery.title"), theme.fontSize, TextAlignmentOptions.Center);
+            var title = UiKit.NewLabel(transform, "Title", "", theme.fontSize, TextAlignmentOptions.Center);
             title.GetComponent<LocText>().Key = "gallery.title";
             UiKit.Place(title.rectTransform, new Vector2(0f, theme.galleryTitleY), theme.galleryTitleSize);
 
@@ -39,7 +39,7 @@ namespace NovaLux
                 UiKit.NewLockedSlot(transform, $"Slot{row * Columns + col}", new Vector2(x, y));
             }
 
-            _close = UiKit.NewChipButton(transform, "Close", Loc.Get("gallery.close"), new Vector2(0f, theme.galleryCloseY),
+            _close = UiKit.NewChipButton(transform, "Close", "", new Vector2(0f, theme.galleryCloseY),
                 theme.closeButtonSize, theme.fontSize, false);
             _close.GetComponentInChildren<LocText>().Key = "gallery.close";
             _close.onClick.AddListener(Close);

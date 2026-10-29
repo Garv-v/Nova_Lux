@@ -52,7 +52,7 @@ namespace NovaLux
         {
             var theme = UiTheme.Current;
             var step = theme.titleButtonSize.y + theme.titleButtonGap;
-            var button = UiKit.NewPillButton(parent, id, Loc.Get(key), icon,
+            var button = UiKit.NewPillButton(parent, id, "", icon,
                 new Vector2(theme.titleMenuX, 2f * step - index * step), theme.titleButtonSize, theme.fontSize);
             button.GetComponentInChildren<LocText>().Key = key;
             if (onClick != null) button.onClick.AddListener(onClick);
