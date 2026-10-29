@@ -57,6 +57,19 @@ Unity 6 프로젝트 (Universal 2D 템플릿). 게임 규칙과 수치는 [docs/
 - 자주 바뀌는 수치와 로직은 씬이 아니라 C# 스크립트나 데이터 에셋에 둔다.
 - `ProjectSettings/ProjectVersion.txt`나 패키지 버전이 바뀌는 변경(에디터 업그레이드 등)은 다른 변경과 섞지 않고 따로 커밋한다.
 
+## 이슈로 작업하기
+
+할 일은 GitHub 이슈로 관리한다. 라벨 뜻은 [docs/agents/triage-labels.md](docs/agents/triage-labels.md)에 있다.
+
+1. 담당자(Assignee)가 본인인 열린 이슈를 고른다. 아트·판정처럼 사람이 직접 하는 작업은 `ready-for-human`, AI에게 맡길 수 있는 작업은 `ready-for-agent`다.
+2. 이슈 본문의 **Blocked by**에 적힌 이슈가 모두 닫혔는지 본다. 닫히지 않았으면 그 이슈가 끝날 때까지 기다리거나, 본문에 "지금 가능"이라고 적힌 부분만 한다.
+3. 본문이 가리키는 지시서를 읽는다(현재 M3 작업은 [docs/08-작업분담.md](docs/08-작업분담.md)). `main`을 pull한 뒤 시작한다.
+4. 브랜치는 위 규칙대로 만들되 작업내용 앞에 이슈 번호를 붙인다. 예: `fiercewolf701/39-domain-core`.
+5. **PR 본문에 `Closes #번호`를 쓴다.** 머지되면 이슈가 자동으로 닫힌다. 이슈 하나를 여러 PR이 나눠 끝낼 때는 마지막 PR에만 쓴다.
+6. 판정처럼 PR로 끝나지 않는 이슈는 결과를 코멘트로 남기고 직접 닫는다.
+
+AI에게 맡길 때 첫 지시 예: "main을 pull하고 이슈 #39를 읽어서 본문과 `docs/08-작업분담.md`의 지시서대로 진행해."
+
 ## AI 도구 (Claude Code + Unity)
 
 두 도구를 함께 쓴다. 역할은 [CLAUDE.md](CLAUDE.md)에 있다.
