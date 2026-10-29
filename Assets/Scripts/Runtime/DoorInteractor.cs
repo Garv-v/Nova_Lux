@@ -22,11 +22,8 @@ namespace NovaLux
         void OnEnable()
         {
             _enter = new InputAction("Enter", InputActionType.Button);
-            _enter.AddBinding("<Keyboard>/e");
-            _enter.AddBinding("<Keyboard>/enter");
             _enter.AddBinding("<Keyboard>/upArrow");
             _enter.AddBinding("<Keyboard>/w");
-            _enter.AddBinding("<Gamepad>/buttonSouth");
             _enter.Enable();
         }
 
@@ -46,7 +43,7 @@ namespace NovaLux
             var canEnter = _room == null && near != null;
             foreach (var door in _doors) door.SetPromptVisible(canEnter && door == near);
 
-            if (canEnter && !ScreenFade.Busy && _enter.WasPressedThisFrame()) Enter(near);
+            if (canEnter && !PauseMenu.IsOpen && !ScreenFade.Busy && _enter.WasPressedThisFrame()) Enter(near);
         }
 
         void Enter(Door door)

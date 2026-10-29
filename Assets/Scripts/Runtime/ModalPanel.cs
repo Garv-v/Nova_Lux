@@ -12,6 +12,7 @@ namespace NovaLux
         protected InputSystemUIInputModule Module { get; private set; }
         Action _onClosed;
         bool _closing;
+        int _cancelBlockedFrame;
 
         // onClosed는 패널이 닫힌 직후 불린다(화면이 포커스를 되돌려 놓는 자리).
         protected static T Open<T>(Transform canvas, Action onClosed) where T : ModalPanel
@@ -26,11 +27,18 @@ namespace NovaLux
 
         protected abstract GameObject FirstSelection { get; }
 
-        protected virtual void Awake() => Module = FindFirstObjectByType<InputSystemUIInputModule>();
+        protected virtual void Awake()
+        {
+            Module = FindFirstObjectByType<InputSystemUIInputModule>();
+            // 패널을 연 입력(Esc)이 같은 프레임에 이 패널을 닫지 않게 한다.
+            SuppressCancelThisFrame();
+        }
+
+        protected void SuppressCancelThisFrame() => _cancelBlockedFrame = Time.frameCount;
 
         void Update()
         {
-            if (_closing || Module == null || Module.cancel == null) return;
+            if (_closing || Module == null || Module.cancel == null || Time.frameCount == _cancelBlockedFrame) return;
             if (Module.cancel.action.WasPressedThisFrame()) Close();
         }
 

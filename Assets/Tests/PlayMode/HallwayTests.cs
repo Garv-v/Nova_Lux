@@ -93,25 +93,6 @@ namespace NovaLux.Tests
         }
 
         [UnityTest]
-        public IEnumerator Gamepad_StickAndDpad_Move()
-        {
-            yield return LoadHallway();
-            PlaceAt(Center);
-            var x0 = Walker.transform.position.x;
-
-            Set(Gamepad.leftStick, new Vector2(1f, 0f));
-            for (var i = 0; i < 10; i++) yield return null;
-            Set(Gamepad.leftStick, Vector2.zero);
-            yield return null;
-            var afterStick = Walker.transform.position.x;
-
-            yield return Hold(Gamepad.dpad.left, 20);
-
-            Assert.Greater(afterStick, x0 + 1f);
-            Assert.Less(Walker.transform.position.x, afterStick - 1f);
-        }
-
-        [UnityTest]
         public IEnumerator NoInput_StaysPut()
         {
             yield return LoadHallway();

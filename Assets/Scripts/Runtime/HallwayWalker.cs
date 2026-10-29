@@ -23,8 +23,6 @@ namespace NovaLux
             _move.AddCompositeBinding("1DAxis")
                 .With("Negative", "<Keyboard>/leftArrow")
                 .With("Positive", "<Keyboard>/rightArrow");
-            _move.AddBinding("<Gamepad>/leftStick/x");
-            _move.AddBinding("<Gamepad>/dpad/x");
             _move.Enable();
         }
 
@@ -36,6 +34,7 @@ namespace NovaLux
 
         void Update()
         {
+            if (PauseMenu.IsOpen) return;
             var p = transform.position;
             p.x += _move.ReadValue<float>() * speed * Time.deltaTime;
             p.x = Mathf.Clamp(p.x, hallway.XMin + halfBody, hallway.XMax - halfBody);

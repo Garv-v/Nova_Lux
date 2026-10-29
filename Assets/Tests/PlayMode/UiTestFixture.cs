@@ -17,7 +17,6 @@ namespace NovaLux.Tests
     {
         Mouse _mouse;
         protected Keyboard Keyboard { get; private set; }
-        protected Gamepad Gamepad { get; private set; }
 
         string _settingsDir;
 
@@ -29,7 +28,6 @@ namespace NovaLux.Tests
             base.Setup();
             _mouse = InputSystem.AddDevice<Mouse>();
             Keyboard = InputSystem.AddDevice<Keyboard>();
-            Gamepad = InputSystem.AddDevice<Gamepad>();
             QuitCalls = 0;
             AppQuit.Handler = () => QuitCalls++;
             ScreenCalls.Clear();

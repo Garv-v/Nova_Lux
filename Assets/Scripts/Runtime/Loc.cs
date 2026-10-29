@@ -34,6 +34,12 @@ namespace NovaLux
             ["settings.language"] = new[] { "언어", "言語" },
             ["settings.close"] = new[] { "닫기", "閉じる" },
 
+            ["pause.resume"] = new[] { "계속하기", "続ける" },
+            ["pause.save"] = new[] { "저장", "セーブ" },
+            ["pause.load"] = new[] { "불러오기", "ロード" },
+            ["pause.settings"] = new[] { "환경설정", "設定" },
+            ["pause.title"] = new[] { "타이틀로", "タイトルへ" },
+
             ["hallway.enter"] = new[] { "입장", "入る" },
             ["room.mine"] = new[] { "내 방", "自分の部屋" },
             ["room.neighbor"] = new[] { "옆집", "隣の部屋" },

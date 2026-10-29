@@ -57,14 +57,14 @@ namespace NovaLux
             EventSystem.current.SetSelectedGameObject(exit.gameObject);
 
             _exit = new InputAction("Exit");
-            _exit.AddBinding("<Keyboard>/escape");
-            _exit.AddBinding("<Gamepad>/buttonEast");
+            _exit.AddBinding("<Keyboard>/upArrow");
+            _exit.AddBinding("<Keyboard>/w");
             _exit.Enable();
         }
 
         void Update()
         {
-            if (_exit.WasPressedThisFrame()) RequestExit();
+            if (!PauseMenu.IsOpen && _exit.WasPressedThisFrame()) RequestExit();
         }
 
         void OnDestroy()
